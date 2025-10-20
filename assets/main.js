@@ -1,52 +1,100 @@
-(function(){
+(function () {
   'use strict';
 
-  // 年の表示と現在ページのARIA
-  var y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
-  var page = document.body.getAttribute('data-page');
-  var current = document.querySelector('[data-nav="' + page + '"]');
-  if (current) current.setAttribute('aria-current','page');
+  var body = document.body;
+  var page = body ? body.getAttribute('data-page') : null;
 
-  // ホーム初回のみフルスクリーン動画を再生
+  var yearLabel = document.getElementById('year');
+  if (yearLabel) {
+    yearLabel.textContent = new Date().getFullYear();
+  }
+
+  if (page) {
+    var currentNav = document.querySelector('[data-nav="' + page + '"]');
+    if (currentNav) {
+      currentNav.setAttribute('aria-current', 'page');
+    }
+  }
+
   if (page === 'home') {
-    var key = 'firstViewPlayed';
-    if (sessionStorage.getItem(key)) return;
-
-    var v = document.createElement('video');
-    v.autoplay = true;
-    v.muted = true;      // 自動再生のため必須
-    v.playsInline = true;
-    v.controls = false;
-    v.preload = 'auto';
-    v.style.position = 'fixed';
-    v.style.inset = '0';
-    v.style.width = '100vw';
-    v.style.height = '100vh';
-    v.style.objectFit = 'cover';
-    v.style.background = '#000';
-    v.style.zIndex = '9999';
-
-    // 複数候補（どちらかが存在すれば再生されます）
-    var s1 = document.createElement('source'); s1.src = 'assets/videos/landing-intro.mp4'; s1.type = 'video/mp4';
-    var s2 = document.createElement('source'); s2.src = 'first_view.mp4'; s2.type = 'video/mp4';
-    v.appendChild(s1); v.appendChild(s2);
-
-    var cleanup = function(){
-      try { v.remove(); } catch(_) {}
+    var firstViewKey = 'firstViewPlayed';
+    var releasePendingState = function () {
+      document.documentElement.removeAttribute('data-first-view');
     };
-    v.addEventListener('ended', function(){
-      sessionStorage.setItem(key,'1');
-      cleanup();
-    });
-    v.addEventListener('error', function(){
-      // 再生できない場合はブロッキングを回避
-      cleanup();
+
+    var hasPlayed = false;
+    try {
+      hasPlayed = !!sessionStorage.getItem(firstViewKey);
+    } catch (err) {
+      hasPlayed = false;
+    }
+
+    if (hasPlayed) {
+      releasePendingState();
+      return;
+    }
+
+    var overlay = document.createElement('video');
+    overlay.className = 'first-view-overlay';
+    overlay.autoplay = true;
+    overlay.muted = true; // Required to allow autoplay without user gesture
+    overlay.playsInline = true;
+    overlay.controls = false;
+    overlay.preload = 'auto';
+    overlay.style.position = 'fixed';
+    overlay.style.inset = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.objectFit = 'cover';
+    overlay.style.background = '#000';
+    overlay.style.zIndex = '9999';
+
+    var primarySource = document.createElement('source');
+    primarySource.src = 'assets/videos/landing-intro.mp4';
+    primarySource.type = 'video/mp4';
+
+    var fallbackSource = document.createElement('source');
+    fallbackSource.src = 'first_view.mp4';
+    fallbackSource.type = 'video/mp4';
+
+    overlay.appendChild(primarySource);
+    overlay.appendChild(fallbackSource);
+
+    var teardown = function () {
+      releasePendingState();
+      try {
+        overlay.remove();
+      } catch (err) {
+        // ignore
+      }
+    };
+
+    overlay.addEventListener('ended', function () {
+      try {
+        sessionStorage.setItem(firstViewKey, '1');
+      } catch (err) {
+        // ignore
+      }
+      teardown();
     });
 
-    document.body.appendChild(v);
-    try { v.load(); } catch(_) {}
-    try { v.play().catch(function(){ /* ignore */ }); } catch(_) {}
+    overlay.addEventListener('error', teardown);
+
+    try {
+      document.body.appendChild(overlay);
+      try {
+        overlay.load();
+      } catch (err) {
+        // ignore
+      }
+      try {
+        overlay.play().catch(function () { /* ignore */ });
+      } catch (err) {
+        // ignore
+      }
+    } catch (err) {
+      teardown();
+    }
   }
 })();
 

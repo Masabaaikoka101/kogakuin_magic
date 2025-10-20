@@ -35,6 +35,15 @@ body {
   color-scheme: dark;
 }
 
+/* Hide the main layout until the first view overlay is mounted */
+html[data-first-view="pending"] body > * {
+  visibility: hidden;
+}
+
+html[data-first-view="pending"] body > .first-view-overlay {
+  visibility: visible;
+}
+
 html[data-theme="white"] {
   --color-bg: #f5f7fb;
   --color-surface: #ffffff;

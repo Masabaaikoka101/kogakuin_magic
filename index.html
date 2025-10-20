@@ -21,6 +21,18 @@
     }
   })();
 </script>
+<script>
+  (function () {
+    var FLAG = 'firstViewPlayed';
+    try {
+      if (!sessionStorage.getItem(FLAG)) {
+        document.documentElement.setAttribute('data-first-view', 'pending');
+      }
+    } catch (e) {
+      document.documentElement.setAttribute('data-first-view', 'pending');
+    }
+  })();
+</script>
 <link rel="stylesheet" href="assets/style.css" />
 <link rel="stylesheet" href="assets/scroll.css" />
 <meta name="description" content="工学院大学マジシャンズ・ソサエティ公式サイト。マジック＆ジャグリングを中心に活動中。新入生募集中！" />
