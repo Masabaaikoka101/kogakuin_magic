@@ -32,7 +32,7 @@
     // ヒーロー見出しの置換
     const heroTitle = document.querySelector('.hero > h1');
     if (heroTitle) {
-      heroTitle.textContent = '工学院大学マジシャンズ・ソサエティ';
+      heroTitle.innerHTML = '<span>工学院大学</span><span>マジシャンズ・ソサエティ</span>';
     }
 
     // 本文を指示どおりに差し替え（ABOUTへの遷移リンクは置かない）
