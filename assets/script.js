@@ -40,11 +40,7 @@
 
   const getPreferredTheme = () => {
     const stored = readStoredTheme();
-    if (stored) return stored;
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'white';
-    }
-    return 'dark';
+    return stored || 'dark';
   };
 
   const getCurrentThemeAttribute = () => {
@@ -104,19 +100,7 @@
     });
   }
 
-  if (window.matchMedia) {
-    const media = window.matchMedia('(prefers-color-scheme: light)');
-    const handleChange = (event) => {
-      const stored = readStoredTheme();
-      if (stored) return;
-      applyTheme(event.matches ? 'white' : 'dark');
-    };
-    if (media.addEventListener) {
-      media.addEventListener('change', handleChange);
-    } else if (media.addListener) {
-      media.addListener(handleChange);
-    }
-  }
+  // System theme changes are ignored unless the user explicitly toggles
 
 
   // TOPページの不要なボタン（CTAのghostボタン）を削除

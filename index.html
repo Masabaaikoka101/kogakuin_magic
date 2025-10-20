@@ -13,11 +13,12 @@
       var stored = localStorage.getItem(KEY);
       if (stored === 'white' || stored === 'dark') {
         theme = stored;
-      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        theme = 'white';
       }
     } catch (e) {}
     document.documentElement.setAttribute('data-theme', theme);
+    if (document.body) {
+      document.body.setAttribute('data-theme', theme);
+    }
   })();
 </script>
 <link rel="stylesheet" href="assets/style.css" />
