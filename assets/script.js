@@ -15,6 +15,109 @@
   if (currentNavLink) {
     currentNavLink.setAttribute("aria-current", "page");
   }
+  const THEME_KEY = 'kms-theme';
+  const root = document.documentElement;
+  const modeToggle = document.querySelector('[data-mode-toggle]');
+  const modeIcon = modeToggle ? modeToggle.querySelector('.mode-toggle__icon') : null;
+  const swapTargets = Array.from(document.querySelectorAll('[data-src-dark][data-src-white]'));
+
+  const readStoredTheme = () => {
+    try {
+      const stored = localStorage.getItem(THEME_KEY);
+      return stored === 'white' || stored === 'dark' ? stored : null;
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const writeStoredTheme = (value) => {
+    try {
+      localStorage.setItem(THEME_KEY, value);
+    } catch (_) {
+      /* storage might be unavailable */
+    }
+  };
+
+  const getPreferredTheme = () => {
+    const stored = readStoredTheme();
+    if (stored) return stored;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'white';
+    }
+    return 'dark';
+  };
+
+  const getCurrentThemeAttribute = () => {
+    const attr = root.getAttribute('data-theme');
+    return attr === 'white' || attr === 'dark' ? attr : null;
+  };
+
+  const updateToggleUi = (theme) => {
+    if (!modeToggle) return;
+    const isWhite = theme === 'white';
+    modeToggle.setAttribute('aria-pressed', isWhite ? 'true' : 'false');
+    modeToggle.classList.toggle('is-light', isWhite);
+    modeToggle.setAttribute('aria-label', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
+    modeToggle.setAttribute('title', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
+    if (modeIcon) {
+      if (modeIcon instanceof HTMLImageElement) {
+        const nextSrc = isWhite ? modeIcon.getAttribute('data-src-white') : modeIcon.getAttribute('data-src-dark');
+        if (nextSrc && modeIcon.getAttribute('src') !== nextSrc) {
+          modeIcon.setAttribute('src', nextSrc);
+        }
+      } else {
+        modeIcon.textContent = isWhite ? '☀' : '☾';
+      }
+    }
+  };
+
+  const swapThemeImages = (theme) => {
+    swapTargets.forEach((img) => {
+      if (!(img instanceof HTMLImageElement)) return;
+      const nextSrc = theme === 'white' ? img.getAttribute('data-src-white') : img.getAttribute('data-src-dark');
+      if (nextSrc && img.getAttribute('src') !== nextSrc) {
+        img.setAttribute('src', nextSrc);
+      }
+    });
+  };
+
+  const applyTheme = (theme) => {
+    const resolved = theme === 'white' ? 'white' : 'dark';
+    root.setAttribute('data-theme', resolved);
+    if (document.body) {
+      document.body.setAttribute('data-theme', resolved);
+    }
+    swapThemeImages(resolved);
+    updateToggleUi(resolved);
+  };
+
+  const initialTheme = getCurrentThemeAttribute() || getPreferredTheme();
+  applyTheme(initialTheme);
+
+  if (modeToggle) {
+    modeToggle.addEventListener('click', () => {
+      const currentAttr = getCurrentThemeAttribute() || 'dark';
+      const current = currentAttr === 'white' ? 'white' : 'dark';
+      const next = current === 'white' ? 'dark' : 'white';
+      applyTheme(next);
+      writeStoredTheme(next);
+    });
+  }
+
+  if (window.matchMedia) {
+    const media = window.matchMedia('(prefers-color-scheme: light)');
+    const handleChange = (event) => {
+      const stored = readStoredTheme();
+      if (stored) return;
+      applyTheme(event.matches ? 'white' : 'dark');
+    };
+    if (media.addEventListener) {
+      media.addEventListener('change', handleChange);
+    } else if (media.addListener) {
+      media.addListener(handleChange);
+    }
+  }
+
 
   // TOPページの不要なボタン（CTAのghostボタン）を削除
   const extraCta = document.querySelector('.cta-row .btn.ghost');
@@ -40,7 +143,7 @@
     if (heroCopy) {
       heroCopy.innerHTML = [
         '<p>私たちはマジックやジャグリングを中心に、みんなで楽しく活動しています。</p>',
-        '<p><strong>「すごい！」と言われる特技、身につけてみない？</strong></p>',
+        '<p><strong>「すごい！」と言われる特技、身につけてみませんか？</strong></p>',
         '<p>ほとんどのメンバーが未経験からのスタート。先輩たちが優しく教えるので、誰でも必ずできるようになります！</p>',
         '<p>学園祭や地域のイベントで発表するチャンスもたくさんありますよ。</p>',
         '<p><strong>新メンバー、いつでも大歓迎です！</strong></p>',
