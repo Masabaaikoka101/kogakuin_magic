@@ -32,7 +32,9 @@
 
   const writeStoredTheme = (value) => {
     try {
-      localStorage.setItem(THEME_KEY, value);
+      if (value === 'white' || value === 'dark') {
+        localStorage.setItem(THEME_KEY, value);
+      }
     } catch (_) {
       /* storage might be unavailable */
     }
