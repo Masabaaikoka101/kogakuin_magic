@@ -330,6 +330,32 @@ main.page {
   flex-direction: column;
   gap: 1rem;
 }
+
+/* ABOUTページ: コンテンツ中央配置のまま文字を左揃え */
+body[data-page="about"] .page .container {
+  text-align: left;
+}
+body[data-page="about"] .about-details {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+body[data-page="about"] .about-details > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+body[data-page="about"] .about-details h2 {
+  margin: 0;
+}
+body[data-page="about"] .about-details p {
+  margin: 0;
+}
+body[data-page="about"] .about-details p + p {
+  margin-top: 0.5rem;
+}
+
 .checklist {
   list-style: "? ";
   padding-left: 1.5rem;
