@@ -8,6 +8,8 @@
   --color-secondary: #aaaaaa;
   --color-accent-start: #0072ff;
   --color-accent-end: #00c6ff;
+  --color-danger: #ff6b6b;
+  --danger-ring: rgba(255, 107, 107, 0.18);
   --color-border: rgba(255, 255, 255, 0.1);
   --bg-image: url("../images/background.png");
   --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans CJK JP", "Yu Gothic", sans-serif;
@@ -18,6 +20,9 @@
   --btn-bg-hover: rgba(255, 255, 255, 0.18);
   --btn-border: rgba(255, 255, 255, 0.25);
   --btn-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  --field-bg: rgba(255, 255, 255, 0.06);
+  --field-border: rgba(255, 255, 255, 0.18);
+  --field-focus-ring: rgba(0, 198, 255, 0.16);
 }
 
 /*================================================
@@ -53,12 +58,17 @@ html[data-theme="white"] {
   --color-surface: #ffffff;
   --color-primary: #111111;
   --color-secondary: #4a4a4a;
+  --color-danger: #ff6b6b;
+  --danger-ring: rgba(176, 0, 32, 0.16);
   --color-border: rgba(17, 17, 17, 0.1);
   --bg-image: url("../images/background-light.png");
   --btn-bg: rgba(17, 17, 17, 0.06);
   --btn-bg-hover: rgba(17, 17, 17, 0.09);
   --btn-border: rgba(17, 17, 17, 0.18);
   --btn-shadow: 0 10px 24px rgba(17, 17, 17, 0.12);
+  --field-bg: rgba(17, 17, 17, 0.03);
+  --field-border: rgba(17, 17, 17, 0.18);
+  --field-focus-ring: rgba(0, 114, 255, 0.14);
   color-scheme: light;
 }
 
@@ -358,6 +368,174 @@ html[data-theme="white"] .btn.primary {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+html[data-theme="dark"] body[data-page="contact"] {
+  --field-bg: #000000;
+  --field-border: rgba(255, 255, 255, 0.22);
+}
+html[data-theme="white"] body[data-page="contact"] {
+  --field-bg: #ffffff;
+  --field-border: rgba(17, 17, 17, 0.18);
+}
+
+/* CONTACT: ダークは黒基調、ライトは白基調 */
+html[data-theme="dark"] body[data-page="contact"] .card {
+  background-color: #000000;
+  color: #ffffff;
+  --color-primary: #ffffff;
+  --color-secondary: rgba(255, 255, 255, 0.72);
+  --color-danger: #b00020;
+  --danger-ring: rgba(255, 107, 107, 0.18);
+  --color-border: rgba(255, 255, 255, 0.14);
+}
+html[data-theme="dark"] body[data-page="contact"] .card.info {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+html[data-theme="white"] body[data-page="contact"] .card.info {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+html[data-theme="dark"] body[data-page="contact"] .embed-card {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+}
+html[data-theme="white"] body[data-page="contact"] .embed-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 28px rgba(17,17,17,0.10);
+}
+
+body[data-page="contact"] .contact-form {
+  margin-top: 0.25rem;
+}
+body[data-page="contact"] .form-grid {
+  display: grid;
+  gap: 1.1rem;
+}
+body[data-page="contact"] .form-row {
+  display: grid;
+  gap: 0.45rem;
+}
+body[data-page="contact"] .form-label {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+body[data-page="contact"] .req,
+body[data-page="contact"] .opt {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.4rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-secondary);
+}
+html[data-theme="white"] body[data-page="contact"] .opt {
+  background: transparent;
+}
+body[data-page="contact"] .req {
+  color: #ffffff;
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+body[data-page="contact"] .req::before {
+  content: "*";
+  margin-right: 0.25rem;
+  font-weight: 900;
+  line-height: 1;
+}
+body[data-page="contact"] .form-input {
+  width: 100%;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  color: var(--color-primary);
+  padding: 0.8rem 0.9rem;
+  line-height: 1.45;
+  font-family: var(--font-base);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+body[data-page="contact"] textarea.form-input {
+  resize: vertical;
+  min-height: 120px;
+}
+body[data-page="contact"] .form-input::placeholder {
+  color: var(--color-secondary);
+  opacity: 0.85;
+}
+body[data-page="contact"] .form-input:focus {
+  outline: none;
+  border-color: var(--color-accent-end);
+  box-shadow: 0 0 0 3px var(--field-focus-ring);
+}
+body[data-page="contact"] .form-input.is-invalid {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--danger-ring);
+}
+body[data-page="contact"] .form-hint {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 0.9rem;
+}
+body[data-page="contact"] .form-error {
+  margin: 0;
+  min-height: 1.2em;
+  color: var(--color-danger);
+  font-size: 0.9rem;
+}
+body[data-page="contact"] .form-fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius) - 6px);
+  padding: 1rem;
+  background: transparent;
+}
+html[data-theme="white"] body[data-page="contact"] .form-fieldset {
+  background: transparent;
+}
+body[data-page="contact"] .form-fieldset.is-invalid {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--danger-ring);
+}
+body[data-page="contact"] .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.9rem;
+}
+body[data-page="contact"] .check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  user-select: none;
+}
+html[data-theme="white"] body[data-page="contact"] .check {
+  background: transparent;
+}
+body[data-page="contact"] .check input {
+  accent-color: var(--color-accent-end);
+}
+body[data-page="contact"] .form-actions {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+body[data-page="contact"] .form-note {
+  margin: 0;
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 /* ABOUTページ: コンテンツ中央配置のまま文字を左揃え */

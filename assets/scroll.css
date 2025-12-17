@@ -38,12 +38,6 @@
   gap: 1rem;
   align-items: stretch;
 }
-.showcase-list figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 .showcase-list img {
   display: block;
   width: 100%;
@@ -53,20 +47,6 @@
   border-radius: var(--radius);
   box-shadow: 0 10px 24px rgba(0,0,0,0.25);
   transition: opacity 0.85s ease, transform 0.25s ease, box-shadow 0.25s ease;
-}
-.showcase-list figure:hover img {
-  transform: scale(1.02);
-  box-shadow: 0 14px 32px rgba(0,0,0,0.32);
-}
-.showcase-list figcaption {
-  margin-top: 0.6rem;
-  color: var(--color-secondary);
-  font-size: 0.95rem;
-  text-align: center;
-  min-height: 2.8em;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -154,7 +134,7 @@ body[data-page="about"] .section.alt .container {
 /* CONTACT: カードの強調を抑える（背景・ボーダー・トランジション） */
 body[data-page="contact"] .card.info {
   background: var(--color-surface);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--color-border);
 }
 body[data-page="contact"] .card {
   transition: none !important; /* ホバーによる“ポップ”は抑制 */
@@ -170,9 +150,6 @@ body[data-page="contact"] .grid.two .card {
 }
 
 /* ABOUT: 本文SNSカードは初期表示から非表示（JSで削除までのチラつき防止） */
-body[data-page="about"] .page .card.info {
-  display: none;
-}
 body[data-page="contact"] .contact-actions .btn {
   width: 100%;
 }
