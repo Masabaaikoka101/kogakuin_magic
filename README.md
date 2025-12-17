@@ -33,7 +33,6 @@
 | テーマ切替と永続化 | `assets/script.js` / `assets/style.css` | `localStorage` と `data-theme` で全要素を一括制御。画像も `data-src-dark/white` で同期し、`aria-pressed` を更新して支援技術に状態を伝えます。 |
 | 初回限定フルスクリーン動画 | `assets/main.js` | `sessionStorage` で再生済み判定し、1セッション1回のみ再生。`ended` / `error` イベントで確実にオーバーレイを除去します。 |
 | ナビ/フッターの自動更新 | `assets/script.js` | `data-page` 由来で `aria-current` を付与、フッター年号を動的更新し、メンテナンス負荷を下げました。 |
-| 依頼テンプレのワンクリックコピー | `contact.html` / `assets/script.js` | `[data-copy-target]` ボタンからクリップボードへ即コピーでき、聞き取り漏れを削減します。 |
 | ギャラリーのキャプション化 | `about.html` / `assets/script.js` | 画像を動的に `<figure>` へラップし、`alt` テキストを `figcaption` に転用。HTMLを簡潔に保ちながら意味付けを追加。 |
 | スクロールアニメーション基盤 | `assets/scroll.css` / `assets/script.js` | `data-animate` をJSで付与し、IntersectionObserverで入場を監視。CSSで遅延やトランスフォームを制御し、JSロジックを最小化。 |
 
@@ -42,7 +41,7 @@
 | --- | --- | --- |
 | HTML5 | 3ページの静的構成 | 未経験からDOMとセマンティクスを正しく学ぶため。環境依存なく配布可能。 |
 | CSS3（Custom Properties / Flexbox / Grid） | テーマ切替、レイアウト、アニメーション | フレームワークに頼らず設計力を鍛える狙い。変数化でダーク/ライト両テーマを一元管理。 |
-| Vanilla JavaScript | テーマ制御、初回動画、IntersectionObserver、クリップボード | 依存ライブラリなしでブラウザAPIを理解するために純JSを選択。 |
+| Vanilla JavaScript | テーマ制御、初回動画、IntersectionObserver | 依存ライブラリなしでブラウザAPIを理解するために純JSを選択。 |
 | 画像・動画アセット | 実績紹介とブランド印象の強化 | 実際の公演写真と動画を使って第三者の信頼感を高める。ファイル最適化は今後の課題として残す。 |
 
 ## 7. 苦労した点と学んだこと
@@ -66,7 +65,7 @@ kogakuin_magic/
 - 日本語ファイル名の実績写真を `assets/images` に集約し、コード側で扱いやすい命名としています。
 
 ## 9. 今後の改善や展望
-1. お問い合わせフォームと自動返信メールを追加し、現状のコピーペースト運用を置き換える。
+1. お問い合わせの自動返信メール（受付完了の案内）を整備し、運用負荷をさらに下げる。
 2. 活動スケジュールや出演実績をJSON/Spreadsheetから読み込む仕組みを導入して更新を自動化。
 3. 画像・動画の最適化（WebP/AVIF、レスポンシブソース、LQIP）でパフォーマンスを改善。
 4. 多言語対応（英語切り替え）とアクセシビリティテストをワークフローに組み込み、外部発信力を向上。
