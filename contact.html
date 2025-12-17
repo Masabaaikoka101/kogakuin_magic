@@ -76,58 +76,93 @@
         <h1 class="no-break">公演依頼・お問い合わせ</h1>
 
         <div class="card info">
-          <p>公演のご依頼、誠にありがとうございます。現在、フォームでの受付は行っておりません。以下の方法でご連絡ください。担当者が順次ご返信いたします。</p>
+          <p>公演のご依頼・ご質問は、下記フォームから受け付けています。担当者が内容を確認のうえ、順次ご返信いたします。</p>
         </div>
 
-        <div class="grid">
-          <!-- メール -->
-          <div class="card">
-            <h2 style="margin-top:0">メールで依頼</h2>
-            <p>下記のアドレス宛に、必要事項（イベント名・日時・場所・想定人数・ご希望の演目など）を記載してお送りください。</p>
+        <div class="card embed-card" aria-label="お問い合わせフォーム">
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="form-grid">
+              <div class="form-row">
+                <label class="form-label" for="cf-name">お名前 <span class="req">必須</span></label>
+                <input class="form-input" id="cf-name" name="name" type="text" autocomplete="name" required />
+                <p class="form-error" data-error-for="name" aria-live="polite"></p>
+              </div>
 
-            <div class="contact-actions">
-              <p>お問い合わせの窓口は <a href="mailto:majiso.kogakuin@gmail.com">majiso.kogakuin@gmail.com</a> です。公式SNSのDM（<a href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener">Instagram</a> / <a href="https://x.com/kogakuin_magic" target="_blank" rel="noopener">X</a>）からのご連絡も歓迎しています。</p>
+              <div class="form-row">
+                <label class="form-label" for="cf-email">メールアドレス <span class="req">必須</span></label>
+                <input class="form-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required />
+                <p class="form-error" data-error-for="email" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-event">イベント名 <span class="req">必須</span></label>
+                <input class="form-input" id="cf-event" name="eventName" type="text" required />
+                <p class="form-error" data-error-for="eventName" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-schedule">開催日程（期間複数日可） <span class="req">必須</span></label>
+                <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required placeholder="例：12月1日〜12月3日 / 12月1日、12月8日（時間の入力は不要です）"></textarea>
+                <p class="form-hint">時間の入力は不要です。期間や複数日など、分かる範囲でご記入ください。</p>
+                <p class="form-error" data-error-for="eventSchedule" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-venue">会場 <span class="req">必須</span></label>
+                <textarea class="form-input" id="cf-venue" name="venue" rows="4" required placeholder="住所・最寄り駅・屋内/屋外など"></textarea>
+                <p class="form-error" data-error-for="venue" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-audience">想定人数 <span class="req">必須</span></label>
+                <input class="form-input" id="cf-audience" name="audience" type="text" required placeholder="例: 50名 / 小学生30名程度" />
+                <p class="form-error" data-error-for="audience" aria-live="polite"></p>
+              </div>
+
+              <fieldset class="form-row form-fieldset">
+                <legend class="form-label">依頼内容 <span class="req">必須</span></legend>
+                <div class="checkbox-group" role="group" aria-describedby="cf-type-hint cf-type-error">
+                  <label class="check"><input type="checkbox" name="requestType" value="マジック"> マジック</label>
+                  <label class="check"><input type="checkbox" name="requestType" value="ジャグリング"> ジャグリング</label>
+                  <label class="check"><input type="checkbox" name="requestType" value="その他" data-other-toggle> その他</label>
+                </div>
+                <p class="form-hint" id="cf-type-hint">複数選択可</p>
+                <p class="form-error" id="cf-type-error" data-error-for="requestType" aria-live="polite"></p>
+
+                <div class="form-row is-hidden" data-other-field>
+                  <label class="form-label" for="cf-other">その他（内容）</label>
+                  <input class="form-input" id="cf-other" name="requestOther" type="text" placeholder="例: 体験コーナーの相談 など" />
+                  <p class="form-error" data-error-for="requestOther" aria-live="polite"></p>
+                </div>
+              </fieldset>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-tel">電話番号 <span class="opt">任意</span></label>
+                <input class="form-input" id="cf-tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" />
+                <p class="form-error" data-error-for="tel" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-remarks">その他連絡事項 <span class="opt">任意</span></label>
+                <textarea class="form-input" id="cf-remarks" name="remarks" rows="4" placeholder="任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など"></textarea>
+                <p class="form-error" data-error-for="remarks" aria-live="polite"></p>
+              </div>
             </div>
-          </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn primary">送信</button>
+              <p class="muted form-note">送信後、担当者より順次ご返信いたします。</p>
+            </div>
+
+          </form>
         </div>
 
-        <!-- コピペ用テンプレート（メール/DM共通） -->
         <div class="card">
-          <h2 style="margin-top:0">コピペ用テンプレート（メール/DM共通）</h2>
-          <p class="muted">※日時・会場・持ち時間など分かる範囲でお知らせください。</p>
+          <h2 style="margin-top:0">その他の連絡手段</h2>
+          <p>フォーム入力が難しい場合は、メールまたは公式SNSのDMでも受け付けています。</p>
           <div class="contact-actions">
-            <textarea id="contact-template" rows="20" readonly style="width:100%;">工学院大学マジシャンズ・ソサエティ様
-
-貴団体のウェブサイトを拝見し、ぜひ公演をお願いしたくご連絡いたしました。
-つきましては、下記の通りイベントを企画しておりますので、ご検討いただけますと幸いです。
-
-----------------------------------------------------
-・お名前：
-・ご所属（団体名）：
-・メールアドレス：
-・電話番号（任意）：
-・イベント名：
-■イベントについて：
-・開催日時：
-・会場（住所・最寄り）：
-・想定観客（年齢層・人数）：
-・依頼内容（マジック／ジャグリング 等）：
-・公演時間（本番・総拘束時間）：
-・ご予算・謝礼：
-・音響・照明・ステージ環境（マイク・暗転可否 等）：
-・機材持込・駐車場（台数）：
-・写真・動画撮影の可否：
-・その他連絡事項：
-----------------------------------------------------
-
-ご多忙のところ恐れ入りますが、ご検討のほど何卒よろしくお願い申し上げます。
-
-（署名）
-団体名／ご氏名：
-電話（任意）：
-メール：</textarea>
-            <button class="btn primary" data-copy-target="#contact-template">テンプレートをコピー</button>
-            <p class="muted">ボタンで上の内容をクリップボードにコピーできます。</p>
+            <p>メール: <a href="mailto:majiso.kogakuin@gmail.com">majiso.kogakuin@gmail.com</a></p>
+            <p>DM: <a href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener">Instagram</a> / <a href="https://x.com/kogakuin_magic" target="_blank" rel="noopener">X</a></p>
           </div>
         </div>
 
