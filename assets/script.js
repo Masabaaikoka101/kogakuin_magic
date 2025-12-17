@@ -138,32 +138,6 @@
     }
   }
 
-  // ABOUT: 本文のSNSカードやボタンを排除し、文面を簡潔に
-  if (page === 'about') {
-    const infoCard = document.querySelector('.page .card.info');
-    if (infoCard) infoCard.remove();
-    const firstCol = document.querySelector('.grid.two > div:first-child');
-    if (firstCol) {
-      const firstH2 = firstCol.querySelector('h2');
-      const firstP = firstH2 ? firstH2.nextElementSibling : null;
-      if (firstP && firstP.tagName && firstP.tagName.toLowerCase() === 'p') {
-        const lines = [
-          'マジシャンズ・ソサエティは、コインやカードマジック、ヨーヨー、ボールジャグリングなど、多彩なパフォーマンスで観客を魅了する部活です。',
-          '学園祭やサロンステージでの発表はもちろん、地域のお祭りや保育園でのボランティア公演など、活躍の場は無限大。',
-          'プロのマジシャンから直接指導を受けられる機会もあり、初心者でも自分のペースで楽しみながら、驚きと感動を与えるスキルを基礎からしっかりと身につけられます。',
-          '好きな時に参加できる自由な雰囲気のなかで、あなたも一緒に魔法のような時間を届けませんか？'
-        ];
-        const parent = firstP.parentElement;
-        const frag = document.createDocumentFragment();
-        lines.forEach(t => { const p = document.createElement('p'); p.textContent = t; frag.appendChild(p); });
-        parent.insertBefore(frag, firstP);
-        parent.removeChild(firstP);
-      }
-    }
-    // 活動内容を見る 等のCTAを削除
-    document.querySelectorAll('.page .cta-row, .page a.btn').forEach(el => el.remove());
-  }
-
   // スクロールアニメーション（IntersectionObserver）
   // デフォルトで主要要素に data-animate を付与（HTMLに未指定でも動作）
   const attachAnimate = (selector, type, delay) => {
@@ -212,94 +186,182 @@
     animatedEls.forEach(show);
   }
 
-  // ABOUT: 画像の下にタイトル（figcaption）を動的追加
-  if (page === 'about') {
-    const list = document.querySelector('.showcase-list');
-    if (list) {
-      list.querySelectorAll('img').forEach((img) => {
-        const p = img.parentElement;
-        if (p && p.tagName && p.tagName.toLowerCase() === 'figure') return;
-        const fig = document.createElement('figure');
-        img.replaceWith(fig);
-        fig.appendChild(img);
-        const cap = document.createElement('figcaption');
-        cap.textContent = img.getAttribute('alt') || '';
-        fig.appendChild(cap);
-      });
-    }
-  }
-
   // CONTACT: スクロール演出は維持（除外ロジックは撤回）
 
-  // 連絡テンプレートのコピーボタン
-  const copyButtons = document.querySelectorAll('[data-copy-target]');
-  copyButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const sel = btn.getAttribute('data-copy-target');
-      const target = sel ? document.querySelector(sel) : null;
-      if (!target) return;
-      const text = target.value || target.textContent || '';
-      if (!text) return;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = 'コピーしました';
-          setTimeout(() => (btn.textContent = 'テンプレートをコピー'), 1200);
-        });
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); } catch (_) {}
-        document.body.removeChild(ta);
-      }
-    });
-  });
-
-  // Contact: チェックリストをテンプレ項目と統一
+  // CONTACT: カスタムフォーム（GASへPOST送信）
   if (page === 'contact') {
-    // チェックリストを最小構成に
-    const ul = document.querySelector('.checklist');
-    if (ul) {
-      ul.innerHTML = [
-        'お名前',
-        'メールアドレス',
-        'イベント名',
-        '開催日時',
-        '会場（住所・最寄り）',
-        '想定人数',
-        '依頼内容（マジック／ジャグリング 等）',
-      ].map(t => `<li>${t}</li>`).join('');
-    }
+    const form = document.getElementById('contact-form');
+    if (form) {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const otherToggle = form.querySelector('[data-other-toggle]');
+      const otherField = form.querySelector('[data-other-field]');
+      const otherInput = form.querySelector('input[name="requestOther"]');
+      const requestFieldset = form.querySelector('.form-fieldset');
 
-    // テンプレート本文も最小構成・以前の宛名に戻す
-    const ta = document.getElementById('contact-template');
-    if (ta) {
-      ta.rows = 16;
-      ta.value = [
-        '工学院大学マジシャンズ・ソサエティ様',
-        '',
-        '貴団体のウェブサイトを拝見し、ぜひ公演をお願いしたくご連絡いたしました。',
-        'つきましては、下記の通りイベントを企画しておりますので、ご検討いただけますと幸いです。',
-        '',
-        '----------------------------------------------------',
-        '・お名前：',
-        '・メールアドレス：',
-        '・イベント名：',
-        '・開催日時：',
-        '・会場（住所・最寄り）：',
-        '・想定人数：',
-        '・依頼内容（マジック／ジャグリング 等）：',
-        '・電話番号（任意）：',
-        '----------------------------------------------------',
-        '',
-        'ご多忙のところ恐れ入りますが、ご検討のほど何卒よろしくお願い申し上げます。',
-        '',
-        '（署名）',
-        '団体名／ご氏名：',
-        'メール：',
-        '電話（任意）：'
-      ].join('\n');
+      const getErrorEl = (name) => form.querySelector(`[data-error-for="${name}"]`);
+
+      const setFieldError = (input, name, message) => {
+        const el = getErrorEl(name);
+        if (el) el.textContent = message || '';
+        if (input) input.classList.toggle('is-invalid', Boolean(message));
+      };
+
+      const clearAllErrors = () => {
+        form.querySelectorAll('[data-error-for]').forEach((el) => (el.textContent = ''));
+        form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+      };
+
+      const toggleOther = () => {
+        const checked = Boolean(otherToggle && otherToggle.checked);
+        if (otherField) otherField.classList.toggle('is-hidden', !checked);
+        if (otherInput) otherInput.required = checked;
+        if (!checked && otherInput) otherInput.value = '';
+      };
+
+      const readValue = (name) => {
+        const input = form.elements.namedItem(name);
+        if (!input) return '';
+        if (input instanceof RadioNodeList) return input.value || '';
+        return (input.value || '').trim();
+      };
+
+      const validate = () => {
+        clearAllErrors();
+
+        let firstInvalid = null;
+        const markInvalid = (input, name, message) => {
+          if (!firstInvalid && input) firstInvalid = input;
+          setFieldError(input, name, message);
+        };
+
+        const nameEl = form.querySelector('#cf-name');
+        const emailEl = form.querySelector('#cf-email');
+        const eventEl = form.querySelector('#cf-event');
+        const scheduleEl = form.querySelector('#cf-schedule');
+        const venueEl = form.querySelector('#cf-venue');
+        const audienceEl = form.querySelector('#cf-audience');
+
+        if (!readValue('name')) markInvalid(nameEl, 'name', 'お名前を入力してください。');
+
+        if (!readValue('email')) {
+          markInvalid(emailEl, 'email', 'メールアドレスを入力してください。');
+        } else if (emailEl && !emailEl.checkValidity()) {
+          markInvalid(emailEl, 'email', 'メールアドレスの形式が正しくありません。');
+        }
+
+        if (!readValue('eventName')) markInvalid(eventEl, 'eventName', 'イベント名を入力してください。');
+        if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', '開催日程を入力してください。');
+        if (!readValue('venue')) markInvalid(venueEl, 'venue', '会場を入力してください。');
+        if (!readValue('audience')) markInvalid(audienceEl, 'audience', '想定人数を入力してください。');
+
+        const types = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
+        if (!types.length) {
+          const err = getErrorEl('requestType');
+          if (err) err.textContent = '依頼内容を1つ以上選択してください。';
+          if (requestFieldset) requestFieldset.classList.add('is-invalid');
+          if (!firstInvalid && requestFieldset) firstInvalid = requestFieldset;
+        }
+
+        if (otherInput && otherInput.required && !readValue('requestOther')) {
+          markInvalid(otherInput, 'requestOther', '「その他」を選択した場合は内容を入力してください。');
+        }
+
+        if (firstInvalid) {
+          if (firstInvalid instanceof HTMLElement && typeof firstInvalid.focus === 'function') {
+            firstInvalid.focus();
+          } else if (requestFieldset && typeof requestFieldset.scrollIntoView === 'function') {
+            requestFieldset.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          }
+          return false;
+        }
+        return true;
+      };
+
+      toggleOther();
+      if (otherToggle) otherToggle.addEventListener('change', toggleOther);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+
+        const endpoint = 'https://script.google.com/macros/s/AKfycbwheFaPhK8tAeYXE4kAK8epoCQnlQeBtHnad1P3eXVTvDPQIfvbY-e7k-ZnviIZcojWwA/exec';
+
+        const schedule = readValue('eventSchedule');
+        const venue = readValue('venue');
+        const audience = readValue('audience');
+        const otherText = readValue('requestOther');
+        const selectedTypes = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
+        const typesForGas = selectedTypes.map((t) => (t === 'その他' && otherText ? `その他: ${otherText}` : t));
+
+        // 送信先GAS（ユーザー提供スクリプト）に合わせたキー名へ整形
+        const payload = {
+          name: readValue('name'),
+          email: readValue('email'),
+          eventName: readValue('eventName'),
+          eventDate: schedule,
+          place: venue,
+          people: audience,
+          type: typesForGas,
+          tel: readValue('tel'),
+          remarks: readValue('remarks'),
+          clientTimestamp: new Date().toISOString(),
+        };
+
+        const requestId = (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
+          ? crypto.randomUUID()
+          : `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+
+        const originalBtnText = submitBtn ? submitBtn.textContent : '';
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = '送信中...';
+        }
+
+        try {
+          const body = JSON.stringify({ ...payload, requestId });
+
+          let confirmed = false;
+          try {
+            const res = await fetch(endpoint, {
+              method: 'POST',
+              mode: 'cors',
+              headers: { 'Content-Type': 'text/plain' },
+              body,
+            });
+            const text = await res.text().catch(() => '');
+            let json = null;
+            try { json = text ? JSON.parse(text) : null; } catch (_) {}
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            if (json && typeof json === 'object' && json.status === 'error') {
+              throw new Error(json.message || 'Server returned error');
+            }
+            confirmed = true;
+          } catch (err) {
+            // CORSでレスポンスが読めない場合のみ no-cors で送信を試行
+            if (!(err instanceof TypeError)) throw err;
+            await fetch(endpoint, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain' },
+              body,
+            });
+          }
+
+          alert(`${confirmed ? '送信しました' : '送信を試行しました（結果の確認ができません）'}。担当者より順次ご返信いたします。\n受付ID: ${requestId}`);
+          form.reset();
+          clearAllErrors();
+          if (requestFieldset) requestFieldset.classList.remove('is-invalid');
+          toggleOther();
+        } catch (err) {
+          const msg = err && typeof err.message === 'string' ? err.message : '';
+          alert(`送信に失敗しました。${msg ? `\n${msg}` : ''}\n通信状況と送信先（GAS）の設定を確認してください。`);
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText || '送信';
+          }
+        }
+      });
     }
   }
 })();
