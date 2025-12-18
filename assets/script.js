@@ -1,108 +1,127 @@
 ﻿// 年号 & 現在ページのナビ強調
 (function () {
-  // フッターの年号を現在の年に更新
-  const y = document.getElementById("year");
-  if (y) {
-    y.textContent = new Date().getFullYear();
-  }
-
   // bodyタグの data-page 属性を元に、現在のナビゲーションリンクを特定
   const page = document.body.getAttribute("data-page");
-  const currentNavLink = document.querySelector(`[data-nav="${page}"]`);
 
-  // 該当するナビゲーションリンクがあれば、aria-current属性を設定してアクセシビリティを向上させる
-  // ※ CSSでの見た目の強調は、style.css内の `body[data-page="..."]` の記述で実現されています
-  if (currentNavLink) {
-    currentNavLink.setAttribute("aria-current", "page");
-  }
-  const THEME_KEY = 'kms-theme';
-  const root = document.documentElement;
-  const modeToggle = document.querySelector('[data-mode-toggle]');
-  const modeIcon = modeToggle ? modeToggle.querySelector('.mode-toggle__icon') : null;
-  const swapTargets = Array.from(document.querySelectorAll('[data-src-dark][data-src-white]'));
-
-  const readStoredTheme = () => {
-    try {
-      const stored = localStorage.getItem(THEME_KEY);
-      return stored === 'white' || stored === 'dark' ? stored : null;
-    } catch (_) {
-      return null;
+  // Header Loading Logic
+  const initHeader = () => {
+    // フッターの年号
+    const y = document.getElementById("year");
+    if (y) {
+      y.textContent = new Date().getFullYear();
     }
-  };
 
-  const writeStoredTheme = (value) => {
-    try {
-      if (value === 'white' || value === 'dark') {
-        localStorage.setItem(THEME_KEY, value);
+    const currentNavLink = document.querySelector(`[data-nav="${page}"]`);
+
+    if (currentNavLink) {
+      currentNavLink.setAttribute("aria-current", "page");
+    }
+
+    // Theme Logic
+    const THEME_KEY = 'kms-theme';
+    const root = document.documentElement;
+    const modeToggle = document.querySelector('[data-mode-toggle]');
+    const modeIcon = modeToggle ? modeToggle.querySelector('.mode-toggle__icon') : null;
+    const swapTargets = Array.from(document.querySelectorAll('[data-src-dark][data-src-white]'));
+
+    const readStoredTheme = () => {
+      try {
+        const stored = localStorage.getItem(THEME_KEY);
+        return stored === 'white' || stored === 'dark' ? stored : null;
+      } catch (_) {
+        return null;
       }
-    } catch (_) {
-      /* storage might be unavailable */
-    }
-  };
+    };
 
-  const getPreferredTheme = () => {
-    const stored = readStoredTheme();
-    return stored || 'dark';
-  };
-
-  const getCurrentThemeAttribute = () => {
-    const attr = root.getAttribute('data-theme');
-    return attr === 'white' || attr === 'dark' ? attr : null;
-  };
-
-  const updateToggleUi = (theme) => {
-    if (!modeToggle) return;
-    const isWhite = theme === 'white';
-    modeToggle.setAttribute('aria-pressed', isWhite ? 'true' : 'false');
-    modeToggle.classList.toggle('is-light', isWhite);
-    modeToggle.setAttribute('aria-label', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
-    modeToggle.setAttribute('title', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
-    if (modeIcon) {
-      if (modeIcon instanceof HTMLImageElement) {
-        const nextSrc = isWhite ? modeIcon.getAttribute('data-src-white') : modeIcon.getAttribute('data-src-dark');
-        if (nextSrc && modeIcon.getAttribute('src') !== nextSrc) {
-          modeIcon.setAttribute('src', nextSrc);
+    const writeStoredTheme = (value) => {
+      try {
+        if (value === 'white' || value === 'dark') {
+          localStorage.setItem(THEME_KEY, value);
         }
-      } else {
-        modeIcon.textContent = isWhite ? '☀' : '☾';
+      } catch (_) {
+        /* storage might be unavailable */
       }
+    };
+
+    const getPreferredTheme = () => {
+      const stored = readStoredTheme();
+      return stored || 'dark';
+    };
+
+    const getCurrentThemeAttribute = () => {
+      const attr = root.getAttribute('data-theme');
+      return attr === 'white' || attr === 'dark' ? attr : null;
+    };
+
+    const updateToggleUi = (theme) => {
+      if (!modeToggle) return;
+      const isWhite = theme === 'white';
+      modeToggle.setAttribute('aria-pressed', isWhite ? 'true' : 'false');
+      modeToggle.classList.toggle('is-light', isWhite);
+      modeToggle.setAttribute('aria-label', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
+      modeToggle.setAttribute('title', isWhite ? 'ライトモードをオフにする' : 'ライトモードをオンにする');
+      if (modeIcon) {
+        if (modeIcon instanceof HTMLImageElement) {
+          const nextSrc = isWhite ? modeIcon.getAttribute('data-src-white') : modeIcon.getAttribute('data-src-dark');
+          if (nextSrc && modeIcon.getAttribute('src') !== nextSrc) {
+            modeIcon.setAttribute('src', nextSrc);
+          }
+        } else {
+          modeIcon.textContent = isWhite ? '☀' : '☾';
+        }
+      }
+    };
+
+    const swapThemeImages = (theme) => {
+      swapTargets.forEach((img) => {
+        if (!(img instanceof HTMLImageElement)) return;
+        const nextSrc = theme === 'white' ? img.getAttribute('data-src-white') : img.getAttribute('data-src-dark');
+        if (nextSrc && img.getAttribute('src') !== nextSrc) {
+          img.setAttribute('src', nextSrc);
+        }
+      });
+    };
+
+    const applyTheme = (theme) => {
+      const resolved = theme === 'white' ? 'white' : 'dark';
+      root.setAttribute('data-theme', resolved);
+      if (document.body) {
+        document.body.setAttribute('data-theme', resolved);
+      }
+      swapThemeImages(resolved);
+      updateToggleUi(resolved);
+    };
+
+    const initialTheme = getCurrentThemeAttribute() || getPreferredTheme();
+    applyTheme(initialTheme);
+
+    if (modeToggle) {
+      modeToggle.addEventListener('click', () => {
+        const currentAttr = getCurrentThemeAttribute() || 'dark';
+        const current = currentAttr === 'white' ? 'white' : 'dark';
+        const next = current === 'white' ? 'dark' : 'white';
+        applyTheme(next);
+        writeStoredTheme(next);
+      });
     }
   };
 
-  const swapThemeImages = (theme) => {
-    swapTargets.forEach((img) => {
-      if (!(img instanceof HTMLImageElement)) return;
-      const nextSrc = theme === 'white' ? img.getAttribute('data-src-white') : img.getAttribute('data-src-dark');
-      if (nextSrc && img.getAttribute('src') !== nextSrc) {
-        img.setAttribute('src', nextSrc);
-      }
-    });
-  };
-
-  const applyTheme = (theme) => {
-    const resolved = theme === 'white' ? 'white' : 'dark';
-    root.setAttribute('data-theme', resolved);
-    if (document.body) {
-      document.body.setAttribute('data-theme', resolved);
-    }
-    swapThemeImages(resolved);
-    updateToggleUi(resolved);
-  };
-
-  const initialTheme = getCurrentThemeAttribute() || getPreferredTheme();
-  applyTheme(initialTheme);
-
-  if (modeToggle) {
-    modeToggle.addEventListener('click', () => {
-      const currentAttr = getCurrentThemeAttribute() || 'dark';
-      const current = currentAttr === 'white' ? 'white' : 'dark';
-      const next = current === 'white' ? 'dark' : 'white';
-      applyTheme(next);
-      writeStoredTheme(next);
-    });
+  // Load Header and then init
+  const headerContainer = document.getElementById('global-header');
+  if (headerContainer) {
+    fetch('header.html')
+      .then(response => response.text())
+      .then(html => {
+        headerContainer.innerHTML = html;
+        initHeader();
+        // ロゴの色反転など、画像関連の初期化も必要ならここで再実行
+      })
+      .catch(err => console.error('Failed to load header:', err));
+  } else {
+    // フォールバック: ヘッダーコンテナが無い場合でもテーマ機能などは動かす
+    initHeader();
   }
 
-  // System theme changes are ignored unless the user explicitly toggles
 
 
   // スクロールアニメーション（IntersectionObserver）
