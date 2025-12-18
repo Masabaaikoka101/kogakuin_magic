@@ -721,7 +721,7 @@ body[data-page="about"] .about-details p+p {
 
 /* ダークモード時の調整 */
 html[data-theme="dark"] .showcase-list {
-  background-color: #2a2a2a;
+  background-color: #111111;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
