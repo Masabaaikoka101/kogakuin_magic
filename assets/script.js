@@ -105,30 +105,8 @@
   // System theme changes are ignored unless the user explicitly toggles
 
 
-  // TOPページの不要なボタン（CTAのghostボタン）を削除
-  const extraCta = document.querySelector('.cta-row .btn.ghost');
-  if (extraCta) {
-    extraCta.remove();
-  }
-
-  // HOME: about.html への遷移ボタン（ヒーローCTA）も不要
-  if (page === 'home') {
-    const primaryCta = document.querySelector('.cta-row .btn.primary');
-    if (primaryCta) primaryCta.remove();
-    const ghostCta = document.querySelector('.cta-row .btn.ghost');
-    if (ghostCta) ghostCta.remove();
-
-    // ヒーロー見出しの置換
-    // const heroTitle = document.querySelector('.hero > h1');
-    // if (heroTitle) {
-    //   heroTitle.innerHTML = '<span>工学院大学</span><span>マジシャンズ・ソサエティ</span>';
-    // }
-
-    // 本文の差し替えロジックは撤廃（HTMLに直接記述）
-  }
-
   // スクロールアニメーション（IntersectionObserver）
-  // デフォルトで主要要素に data-animate を付与（HTMLに未指定でも動作）
+  // デフォルトで主要要素に data-animate を付与
   const attachAnimate = (selector, type, delay) => {
     // お問い合わせページではスクロールアニメーションを無効化
     if (page === 'contact') return;
@@ -142,17 +120,17 @@
       }
     });
   };
-  // ページ共通/代表的な候補（ヒーローや見出しは除外）
-  attachAnimate('.cta-row .btn.primary', 'fade-up', 120);
-  if (page === 'contact') {
-    attachAnimate('.section .card', 'fade-up', 180);
-  } else {
-    attachAnimate('.section .card', 'fade-up', 120);
-  }
-  // 活動例の画像（1枚ずつ表示）
-  attachAnimate('.showcase-list .card', 'fade-up', 120); // 念のため古い定義があれば残存しないようにimgへ
-  attachAnimate('.showcase-list figure', 'fade-in', 120); // figure自体をアニメーション対象にすると内包要素ごとフェードイン
-  attachAnimate('.gallery-grid img', 'fade-in', 120); // 互換: 既存クラスでも対応
+
+  // アニメーション適用ルール
+
+
+  // セクション内のカード
+  const cardDelay = page === 'contact' ? 180 : 120;
+  attachAnimate('.section .card', 'fade-up', cardDelay);
+
+  // 活動紹介画像・ギャラリー
+  attachAnimate('.showcase-list figure', 'fade-in', 120);
+  attachAnimate('.gallery-grid img', 'fade-in', 120);
 
   const animatedEls = document.querySelectorAll('[data-animate]');
   const show = el => el.setAttribute('data-in-view', 'true');
