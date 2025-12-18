@@ -141,6 +141,9 @@
   // スクロールアニメーション（IntersectionObserver）
   // デフォルトで主要要素に data-animate を付与（HTMLに未指定でも動作）
   const attachAnimate = (selector, type, delay) => {
+    // お問い合わせページではスクロールアニメーションを無効化
+    if (page === 'contact') return;
+
     document.querySelectorAll(selector).forEach((el, idx) => {
       if (!el.hasAttribute('data-animate')) {
         el.setAttribute('data-animate', type);
