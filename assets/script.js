@@ -119,23 +119,12 @@
     if (ghostCta) ghostCta.remove();
 
     // ヒーロー見出しの置換
-    const heroTitle = document.querySelector('.hero > h1');
-    if (heroTitle) {
-      heroTitle.innerHTML = '<span>工学院大学</span><span>マジシャンズ・ソサエティ</span>';
-    }
+    // const heroTitle = document.querySelector('.hero > h1');
+    // if (heroTitle) {
+    //   heroTitle.innerHTML = '<span>工学院大学</span><span>マジシャンズ・ソサエティ</span>';
+    // }
 
-    // 本文を指示どおりに差し替え（ABOUTへの遷移リンクは置かない）
-    const heroCopy = document.querySelector('.hero-copy');
-    if (heroCopy) {
-      heroCopy.innerHTML = [
-        '<p>私たちはマジックやジャグリングを中心に、みんなで楽しく活動しています。</p>',
-        '<p><strong>「すごい！」と言われる特技、身につけてみませんか？</strong></p>',
-        '<p>ほとんどのメンバーが未経験からのスタート。先輩たちが優しく教えるので、誰でも必ずできるようになります！</p>',
-        '<p>学園祭や地域のイベントで発表するチャンスもたくさんありますよ。</p>',
-        '<p><strong>新メンバー、いつでも大歓迎です！</strong></p>',
-        '<p><strong>＼SNSで活動の様子をチェック！／</strong><br>最新のショー情報や練習風景は、画面右上の公式SNSから！</p>'
-      ].join('');
-    }
+    // 本文の差し替えロジックは撤廃（HTMLに直接記述）
   }
 
   // スクロールアニメーション（IntersectionObserver）
