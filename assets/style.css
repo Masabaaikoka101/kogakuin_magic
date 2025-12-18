@@ -246,12 +246,12 @@ html[data-theme="white"] img[data-invert-on-white="true"] {
   メインコンテンツ
 =================================================*/
 main.page {
-  padding-top: 3rem;
+  padding-top: 0;
   padding-bottom: 3rem;
 }
 
 .section {
-  padding: 3rem 0;
+  padding: 2rem 0;
 }
 
 .section.alt {
