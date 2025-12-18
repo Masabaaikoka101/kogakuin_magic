@@ -1,10 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="ja" data-theme="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>お問い合わせ | 工学院大学マジシャンズ・ソサエティ</title>
-<link rel="icon" type="image/png" href="images/logo.png" />
+  <link rel="icon" type="image/png" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
     (function () {
       var KEY = 'kms-theme';
@@ -14,7 +18,7 @@
         if (stored === 'white' || stored === 'dark') {
           theme = stored;
         }
-      } catch (e) {}
+      } catch (e) { }
       document.documentElement.setAttribute('data-theme', theme);
       if (document.body) {
         document.body.setAttribute('data-theme', theme);
@@ -22,14 +26,30 @@
     })();
   </script>
   <style>
-    html { background-color: #121212; color: #ffffff; }
-    html[data-theme="white"] { background-color: #f5f7fb; color: #111111; }
-    body { background-color: #121212; color: #ffffff; }
-    body[data-theme="white"] { background-color: #f5f7fb; color: #111111; }
+    html {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    html[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    body[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
   </style>
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/scroll.css" />
 </head>
+
 <body data-page="contact" data-theme="dark">
   <header class="site-header">
     <div class="container header-inner">
@@ -43,26 +63,17 @@
           <li><a href="contact.html" data-nav="contact">お問い合わせ</a></li>
         </ul>
         <div class="nav-right">
-          <a class="icon-link" href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener" aria-label="Instagram">
+          <a class="icon-link" href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener"
+            aria-label="Instagram">
             <img src="assets/icons/Instagram_Glyph_Gradient.png" alt="Instagram">
           </a>
           <a class="icon-link" href="https://x.com/kogakuin_magic" target="_blank" rel="noopener" aria-label="X">
             <img src="assets/icons/logo-white.png" alt="X" data-invert-on-white="true">
           </a>
-          <button
-            type="button"
-            class="mode-toggle"
-            data-mode-toggle
-            aria-pressed="false"
-            aria-label="ライトモードをオンにする"
+          <button type="button" class="mode-toggle" data-mode-toggle aria-pressed="false" aria-label="ライトモードをオンにする"
             title="ライトモードをオンにする">
-            <img
-              src="assets/icons/toggle/mode-dark.png"
-              data-src-dark="assets/icons/toggle/mode-dark.png"
-              data-src-white="assets/icons/toggle/mode-light.png"
-              alt="テーマ切り替えアイコン"
-              class="mode-toggle__icon"
-              width="32"
+            <img src="assets/icons/toggle/mode-dark.png" data-src-dark="assets/icons/toggle/mode-dark.png"
+              data-src-white="assets/icons/toggle/mode-light.png" alt="テーマ切り替えアイコン" class="mode-toggle__icon" width="32"
               height="32">
           </button>
         </div>
@@ -90,7 +101,8 @@
 
               <div class="form-row">
                 <label class="form-label" for="cf-email">メールアドレス <span class="req">必須</span></label>
-                <input class="form-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required />
+                <input class="form-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email"
+                  required />
                 <p class="form-error" data-error-for="email" aria-live="polite"></p>
               </div>
 
@@ -102,20 +114,23 @@
 
               <div class="form-row">
                 <label class="form-label" for="cf-schedule">開催日程（期間複数日可） <span class="req">必須</span></label>
-                <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required placeholder="例：12月1日〜12月3日 / 12月1日、12月8日（時間の入力は不要です）"></textarea>
+                <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required
+                  placeholder="例：12月1日〜12月3日 / 12月1日、12月8日（時間の入力は不要です）"></textarea>
                 <p class="form-hint">時間の入力は不要です。期間や複数日など、分かる範囲でご記入ください。</p>
                 <p class="form-error" data-error-for="eventSchedule" aria-live="polite"></p>
               </div>
 
               <div class="form-row">
                 <label class="form-label" for="cf-venue">会場 <span class="req">必須</span></label>
-                <textarea class="form-input" id="cf-venue" name="venue" rows="4" required placeholder="住所・最寄り駅・屋内/屋外など"></textarea>
+                <textarea class="form-input" id="cf-venue" name="venue" rows="4" required
+                  placeholder="住所・最寄り駅・屋内/屋外など"></textarea>
                 <p class="form-error" data-error-for="venue" aria-live="polite"></p>
               </div>
 
               <div class="form-row">
                 <label class="form-label" for="cf-audience">想定人数 <span class="req">必須</span></label>
-                <input class="form-input" id="cf-audience" name="audience" type="text" required placeholder="例: 50名 / 小学生30名程度" />
+                <input class="form-input" id="cf-audience" name="audience" type="text" required
+                  placeholder="例: 50名 / 小学生30名程度" />
                 <p class="form-error" data-error-for="audience" aria-live="polite"></p>
               </div>
 
@@ -124,14 +139,16 @@
                 <div class="checkbox-group" role="group" aria-describedby="cf-type-hint cf-type-error">
                   <label class="check"><input type="checkbox" name="requestType" value="マジック"> マジック</label>
                   <label class="check"><input type="checkbox" name="requestType" value="ジャグリング"> ジャグリング</label>
-                  <label class="check"><input type="checkbox" name="requestType" value="その他" data-other-toggle> その他</label>
+                  <label class="check"><input type="checkbox" name="requestType" value="その他" data-other-toggle>
+                    その他</label>
                 </div>
                 <p class="form-hint" id="cf-type-hint">複数選択可</p>
                 <p class="form-error" id="cf-type-error" data-error-for="requestType" aria-live="polite"></p>
 
                 <div class="form-row is-hidden" data-other-field>
                   <label class="form-label" for="cf-other">その他（内容）</label>
-                  <input class="form-input" id="cf-other" name="requestOther" type="text" placeholder="例: 体験コーナーの相談 など" />
+                  <input class="form-input" id="cf-other" name="requestOther" type="text"
+                    placeholder="例: 体験コーナーの相談 など" />
                   <p class="form-error" data-error-for="requestOther" aria-live="polite"></p>
                 </div>
               </fieldset>
@@ -144,7 +161,8 @@
 
               <div class="form-row">
                 <label class="form-label" for="cf-remarks">その他連絡事項 <span class="opt">任意</span></label>
-                <textarea class="form-input" id="cf-remarks" name="remarks" rows="4" placeholder="任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など"></textarea>
+                <textarea class="form-input" id="cf-remarks" name="remarks" rows="4"
+                  placeholder="任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など"></textarea>
                 <p class="form-error" data-error-for="remarks" aria-live="polite"></p>
               </div>
             </div>
@@ -162,7 +180,8 @@
           <p>フォーム入力が難しい場合は、メールまたは公式SNSのDMでも受け付けています。</p>
           <div class="contact-actions">
             <p>メール: <a href="mailto:majiso.kogakuin@gmail.com">majiso.kogakuin@gmail.com</a></p>
-            <p>DM: <a href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener">Instagram</a> / <a href="https://x.com/kogakuin_magic" target="_blank" rel="noopener">X</a></p>
+            <p>DM: <a href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener">Instagram</a> / <a
+                href="https://x.com/kogakuin_magic" target="_blank" rel="noopener">X</a></p>
           </div>
         </div>
 
@@ -178,6 +197,5 @@
 
   <script src="assets/script.js" defer></script>
 </body>
+
 </html>
-
-

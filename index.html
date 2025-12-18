@@ -1,134 +1,150 @@
 ﻿<!DOCTYPE html>
 <html lang="ja" data-theme="dark" data-first-view="pending">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HOME | 工学院大学マジシャンズ・ソサエティ</title>
-<link rel="icon" type="image/png" href="images/logo.png" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script>
-  (function () {
-    var KEY = 'kms-theme';
-    var theme = 'dark';
-    try {
-      var stored = localStorage.getItem(KEY);
-      if (stored === 'white' || stored === 'dark') {
-        theme = stored;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HOME | 工学院大学マジシャンズ・ソサエティ</title>
+  <link rel="icon" type="image/png" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      var KEY = 'kms-theme';
+      var theme = 'dark';
+      try {
+        var stored = localStorage.getItem(KEY);
+        if (stored === 'white' || stored === 'dark') {
+          theme = stored;
+        }
+      } catch (e) { }
+      document.documentElement.setAttribute('data-theme', theme);
+      if (document.body) {
+        document.body.setAttribute('data-theme', theme);
       }
-    } catch (e) {}
-    document.documentElement.setAttribute('data-theme', theme);
-    if (document.body) {
-      document.body.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <style>
+    html {
+      background-color: #121212;
+      color: #ffffff;
     }
-  })();
-</script>
-<style>
-  html { background-color: #121212; color: #ffffff; }
-  html[data-theme="white"] { background-color: #f5f7fb; color: #111111; }
-  body { background-color: #121212; color: #ffffff; }
-  body[data-theme="white"] { background-color: #f5f7fb; color: #111111; }
-  html[data-first-view="pending"] body > * { visibility: hidden; }
-  html[data-first-view="pending"] body > .first-view-overlay { visibility: visible; }
-</style>
-<script>
-  (function () {
-    var FLAG = 'firstViewPlayed';
-    var root = document.documentElement;
-    var setPending = function () {
-      root.setAttribute('data-first-view', 'pending');
-    };
-    var clearPending = function () {
-      root.removeAttribute('data-first-view');
-    };
-    try {
-      if (sessionStorage.getItem(FLAG)) {
-        clearPending();
-      } else {
+
+    html[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    body[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
+
+    html[data-first-view="pending"] body>* {
+      visibility: hidden;
+    }
+
+    html[data-first-view="pending"] body>.first-view-overlay {
+      visibility: visible;
+    }
+  </style>
+  <script>
+    (function () {
+      var FLAG = 'firstViewPlayed';
+      var root = document.documentElement;
+      var setPending = function () {
+        root.setAttribute('data-first-view', 'pending');
+      };
+      var clearPending = function () {
+        root.removeAttribute('data-first-view');
+      };
+      try {
+        if (sessionStorage.getItem(FLAG)) {
+          clearPending();
+        } else {
+          setPending();
+        }
+      } catch (e) {
         setPending();
       }
-    } catch (e) {
-      setPending();
-    }
-  })();
-</script>
-<link rel="stylesheet" href="assets/style.css" />
-<link rel="stylesheet" href="assets/scroll.css" />
-<meta name="description" content="工学院大学マジシャンズ・ソサエティ公式サイト。マジック＆ジャグリングを中心に活動中。新入生募集中！" />
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/scroll.css" />
+  <meta name="description" content="工学院大学マジシャンズ・ソサエティ公式サイト。マジック＆ジャグリングを中心に活動中。新入生募集中！" />
 </head>
+
 <body data-page="home" data-theme="dark">
-<header class="site-header">
-<div class="container header-inner">
-<nav class="main-nav">
-  <a href="index.html" class="brand" aria-label="工学院大学マジシャンズ・ソサエティ">
-    <img src="images/logo.png" data-invert-on-white="true" alt="KMS Logo" style="height: 45px; display: block;">
-  </a>
-  <ul class="nav-left" role="list">
-    <li><a href="index.html" data-nav="home">ホーム</a></li>
-    <li><a href="about.html" data-nav="about">活動紹介</a></li>
-    <li><a href="contact.html" data-nav="contact">お問い合わせ</a></li>
-  </ul>
-  <div class="nav-right">
-    <a class="icon-link" href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener" aria-label="Instagram">
-    <img src="assets/icons/Instagram_Glyph_Gradient.png" alt="Instagram">
-    </a>
-    <a class="icon-link" href="https://x.com/kogakuin_magic" target="_blank" rel="noopener" aria-label="X">
-    <img src="assets/icons/logo-white.png" alt="X" data-invert-on-white="true">
-    </a>
-    <button
-      type="button"
-      class="mode-toggle"
-      data-mode-toggle
-      aria-pressed="false"
-      aria-label="ライトモードをオンにする"
-      title="ライトモードをオンにする">
-      <img
-        src="assets/icons/toggle/mode-dark.png"
-        data-src-dark="assets/icons/toggle/mode-dark.png"
-        data-src-white="assets/icons/toggle/mode-light.png"
-        alt="テーマ切り替えアイコン"
-        class="mode-toggle__icon"
-        width="32"
-        height="32">
-    </button>
-  </div>
-</nav>
-</div>
-</header>
+  <header class="site-header">
+    <div class="container header-inner">
+      <nav class="main-nav">
+        <a href="index.html" class="brand" aria-label="工学院大学マジシャンズ・ソサエティ">
+          <img src="images/logo.png" data-invert-on-white="true" alt="KMS Logo" style="height: 45px; display: block;">
+        </a>
+        <ul class="nav-left" role="list">
+          <li><a href="index.html" data-nav="home">ホーム</a></li>
+          <li><a href="about.html" data-nav="about">活動紹介</a></li>
+          <li><a href="contact.html" data-nav="contact">お問い合わせ</a></li>
+        </ul>
+        <div class="nav-right">
+          <a class="icon-link" href="https://www.instagram.com/kogakuin_magic/" target="_blank" rel="noopener"
+            aria-label="Instagram">
+            <img src="assets/icons/Instagram_Glyph_Gradient.png" alt="Instagram">
+          </a>
+          <a class="icon-link" href="https://x.com/kogakuin_magic" target="_blank" rel="noopener" aria-label="X">
+            <img src="assets/icons/logo-white.png" alt="X" data-invert-on-white="true">
+          </a>
+          <button type="button" class="mode-toggle" data-mode-toggle aria-pressed="false" aria-label="ライトモードをオンにする"
+            title="ライトモードをオンにする">
+            <img src="assets/icons/toggle/mode-dark.png" data-src-dark="assets/icons/toggle/mode-dark.png"
+              data-src-white="assets/icons/toggle/mode-light.png" alt="テーマ切り替えアイコン" class="mode-toggle__icon" width="32"
+              height="32">
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
 
 
-<main>
-<section class="hero">
-<h1><span>工学院大学</span><span>マジシャンズ・ソサエティ</span></h1>
-<div class="container hero-inner">
-<div class="hero-media" aria-label="メインビジュアル">
-  <img src="images/hero-image.png" alt="工学院大学マジシャンズ・ソサエティの活動風景" style="aspect-ratio:16/9; width:100%; border-radius:var(--radius); object-fit:cover;">
-</div>
-<div class="hero-copy">
-<p class="lead"><span>マジック＆ジャグリングを</span><span>中心に活動中！</span><span aria-hidden="true">🎩✨</span></p>
-<p class="greeting">
-新入生も随時募集中です。活動の詳細は <a href="about.html">ABOUT</a> ページをご覧ください。<br>
-ご不明な点があれば、画面右上の公式SNSからダイレクトメッセージでご相談ください。
-</p>
-<div class="cta-row">
-<a class="btn primary" href="about.html">活動内容を見る</a>
-<a class="btn ghost no-break" href="contact.html">公演依頼・お問い合わせ</a>
-</div>
-</div>
-</div>
-</section>
-</main>
+  <main>
+    <section class="hero">
+      <h1><span>工学院大学</span><span>マジシャンズ・ソサエティ</span></h1>
+      <div class="container hero-inner">
+        <div class="hero-media" aria-label="メインビジュアル">
+          <img src="images/hero-image.png" alt="工学院大学マジシャンズ・ソサエティの活動風景"
+            style="aspect-ratio:16/9; width:100%; border-radius:var(--radius); object-fit:cover;">
+        </div>
+        <div class="hero-copy">
+          <p class="lead"><span>マジック＆ジャグリングを</span><span>中心に活動中！</span><span aria-hidden="true">🎩✨</span></p>
+          <p class="greeting">
+            新入生も随時募集中です。活動の詳細は <a href="about.html">ABOUT</a> ページをご覧ください。<br>
+            ご不明な点があれば、画面右上の公式SNSからダイレクトメッセージでご相談ください。
+          </p>
+          <div class="cta-row">
+            <a class="btn primary" href="about.html">活動内容を見る</a>
+            <a class="btn ghost no-break" href="contact.html">公演依頼・お問い合わせ</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
 
-<footer class="site-footer">
-<div class="container">
-<small>© <span id="year"></span> Kogakuin Magicians' Society</small>
-</div>
-</footer>
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Kogakuin Magicians' Society</small>
+    </div>
+  </footer>
 
 
-<script src="assets/script.js" defer></script>
-<script src="assets/main.js" defer></script>
+  <script src="assets/script.js" defer></script>
+  <script src="assets/main.js" defer></script>
 </body>
+
 </html>
-
-
