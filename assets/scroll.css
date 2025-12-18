@@ -7,6 +7,7 @@
   will-change: opacity, transform;
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
+
 [data-animate][data-in-view="true"] {
   opacity: 1;
   transform: none;
@@ -16,15 +17,19 @@
 [data-animate="fade-in"] {
   transform: none;
 }
+
 [data-animate="fade-up"] {
   transform: translateY(14px);
 }
+
 [data-animate="fade-right"] {
   transform: translateX(-16px);
 }
+
 [data-animate="fade-left"] {
   transform: translateX(16px);
 }
+
 [data-animate="zoom-in"] {
   transform: scale(0.98);
 }
@@ -35,9 +40,18 @@
 .showcase-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  align-items: stretch;
+  gap: 2rem 1rem;
+  /* 縦の間隔を広げる */
+  align-items: start;
 }
+
+.showcase-list figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .showcase-list img {
   display: block;
   width: 100%;
@@ -45,8 +59,22 @@
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--radius);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
   transition: opacity 0.85s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.showcase-list figcaption {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 500;
+  /* 日本語の折り返し制御 */
+  line-break: strict;
+  word-break: break-all;
+  /* 必要に応じて単語内でも折るが下記balanceで調整 */
+  text-wrap: balance;
+  /* 行の長さをバランス良く調整 */
 }
 
 @media (max-width: 768px) {
@@ -69,21 +97,21 @@
   top: 0;
   z-index: 1000;
   /* 半透明 + 背景ぼかしで馴染ませる */
-  background-color: rgba(18,18,18,0.55);
+  background-color: rgba(18, 18, 18, 0.55);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 html[data-theme="white"] .site-header {
-  background-color: rgba(245,247,251,0.72);
-  border-bottom-color: rgba(17,17,17,0.08);
+  background-color: rgba(245, 247, 251, 0.72);
+  border-bottom-color: rgba(17, 17, 17, 0.08);
 }
 
 /*================================================
   ヒーローの可読性向上（左寄せ・幅制御）
 =================================================*/
-.hero > h1 {
+.hero>h1 {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -98,15 +126,20 @@ html[data-theme="white"] .site-header {
 body[data-page="contact"] .btn:hover {
   transform: none;
 }
+
 .hero .hero-copy {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   text-align: left;
 }
+
 @media (min-width: 1024px) {
-  .hero > h1,
-  .hero .hero-copy { max-width: 860px; }
+
+  .hero>h1,
+  .hero .hero-copy {
+    max-width: 860px;
+  }
 }
 
 /* 活動例セクションの幅を少し狭く（見やすさ向上） */
@@ -118,17 +151,18 @@ body[data-page="about"] .section.alt .container {
 .contact-actions textarea {
   background-color: var(--color-surface);
   color: var(--color-primary);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius);
   padding: 0.75rem 1rem;
   line-height: 1.6;
   font-family: var(--font-base);
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.2);
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
 }
+
 .contact-actions textarea:focus {
   outline: none;
   border-color: var(--color-accent-end);
-  box-shadow: 0 0 0 3px rgba(0,198,255,0.15);
+  box-shadow: 0 0 0 3px rgba(0, 198, 255, 0.15);
 }
 
 /* CONTACT: カードの強調を抑える（背景・ボーダー・トランジション） */
@@ -136,15 +170,18 @@ body[data-page="contact"] .card.info {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
 }
+
 body[data-page="contact"] .card {
-  transition: none !important; /* ホバーによる“ポップ”は抑制 */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  transition: none !important;
+  /* ホバーによる“ポップ”は抑制 */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* Contactページの使いやすさ向上 */
 body[data-page="contact"] .grid.two {
   align-items: stretch;
 }
+
 body[data-page="contact"] .grid.two .card {
   height: 100%;
 }
@@ -153,6 +190,7 @@ body[data-page="contact"] .grid.two .card {
 body[data-page="contact"] .contact-actions .btn {
   width: 100%;
 }
+
 body[data-page="contact"] h2 {
   letter-spacing: 0.02em;
 }
@@ -170,6 +208,7 @@ body[data-page="contact"] h2 {
 body[data-page="contact"] [data-animate] {
   transition: opacity 0.9s ease, transform 0.9s ease;
 }
+
 body[data-page="contact"] [data-animate="fade-up"] {
   transform: translateY(20px);
 }

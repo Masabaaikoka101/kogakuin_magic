@@ -1,5 +1,5 @@
 ﻿// 年号 & 現在ページのナビ強調
-(function(){
+(function () {
   // フッターの年号を現在の年に更新
   const y = document.getElementById("year");
   if (y) {
@@ -161,7 +161,8 @@
     attachAnimate('.section .card', 'fade-up', 120);
   }
   // 活動例の画像（1枚ずつ表示）
-  attachAnimate('.showcase-list img', 'fade-in', 120);
+  attachAnimate('.showcase-list .card', 'fade-up', 120); // 念のため古い定義があれば残存しないようにimgへ
+  attachAnimate('.showcase-list figure', 'fade-in', 120); // figure自体をアニメーション対象にすると内包要素ごとフェードイン
   attachAnimate('.gallery-grid img', 'fade-in', 120); // 互換: 既存クラスでも対応
 
   const animatedEls = document.querySelectorAll('[data-animate]');
@@ -333,7 +334,7 @@
             });
             const text = await res.text().catch(() => '');
             let json = null;
-            try { json = text ? JSON.parse(text) : null; } catch (_) {}
+            try { json = text ? JSON.parse(text) : null; } catch (_) { }
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             if (json && typeof json === 'object' && json.status === 'error') {
               throw new Error(json.message || 'Server returned error');
