@@ -61,13 +61,21 @@
 
         <div class="card info">
           <p>公演のご依頼・ご質問は、下記フォームから受け付けています。担当者が内容を確認のうえ、順次ご返信いたします。</p>
-          <p class="form-hint" style="margin-top:0.5rem; color:var(--color-primary);">
-            <strong>【お問い合わせのみの方へ】</strong><br>必須項目が未定の場合は、お手数ですが「未定」とご入力ください。
-          </p>
         </div>
 
         <div class="card embed-card" aria-label="お問い合わせフォーム">
           <form id="contact-form" class="contact-form" novalidate>
+            <!-- フォーム切り替えスイッチ -->
+            <div class="form-switch-row">
+              <div class="form-switch">
+                <input type="radio" id="mode-performance" name="formMode" value="performance" checked>
+                <label for="mode-performance">公演依頼</label>
+
+                <input type="radio" id="mode-general" name="formMode" value="general">
+                <label for="mode-general">その他のお問い合わせ</label>
+              </div>
+            </div>
+
             <div class="form-grid">
               <div class="form-row">
                 <label class="form-label" for="cf-name">お名前 <span class="req">必須</span></label>
@@ -83,64 +91,67 @@
                 <p class="form-error" data-error-for="email" aria-live="polite"></p>
               </div>
 
-              <div class="form-row">
-                <label class="form-label" for="cf-event">イベント名 <span class="req">必須</span></label>
-                <input class="form-input" id="cf-event" name="eventName" type="text" required
-                  placeholder="例：〇〇子ども会（未定の場合は「未定」と入力）" />
-                <p class="form-error" data-error-for="eventName" aria-live="polite"></p>
-              </div>
-
-              <div class="form-row">
-                <label class="form-label" for="cf-schedule">開催日程（期間複数日可） <span class="req">必須</span></label>
-                <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">期間や複数日など、分かる範囲でご記入ください。</p>
-                <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required
-                  placeholder="例：12月1日〜12月3日（未定の場合は「未定」と入力）"></textarea>
-                <p class="form-error" data-error-for="eventSchedule" aria-live="polite"></p>
-              </div>
-
-              <div class="form-row">
-                <label class="form-label" for="cf-venue">会場 <span class="req">必須</span></label>
-                <textarea class="form-input" id="cf-venue" name="venue" rows="4" required
-                  placeholder="例：住所・最寄り駅・屋内/屋外など（未定の場合は「未定」と入力）"></textarea>
-                <p class="form-error" data-error-for="venue" aria-live="polite"></p>
-              </div>
-
-              <div class="form-row">
-                <label class="form-label" for="cf-audience">想定人数 <span class="req">必須</span></label>
-                <input class="form-input" id="cf-audience" name="audience" type="text" required
-                  placeholder="例：50名（未定の場合は「未定」と入力）" />
-                <p class="form-error" data-error-for="audience" aria-live="polite"></p>
-              </div>
-
-              <div class="form-row">
-                <label class="form-label" for="cf-budget">出演料（ご予算） <span class="req">必須</span></label>
-                <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">
-                  ボランティア出演も可能です（交通費等は要相談）。<br>頂いた出演料は今後の活動費として大切に活用させていただきます。
-                </p>
-                <input class="form-input" id="cf-budget" name="budget" type="text" required
-                  placeholder="例：1〜2万円、3万円、要相談、ボランティア希望（交通費のみ相談）など（未定の場合は「未定」と入力）" />
-                <p class="form-error" data-error-for="budget" aria-live="polite"></p>
-              </div>
-
-              <fieldset class="form-row form-fieldset">
-                <legend class="form-label">依頼内容 <span class="req">必須</span></legend>
-                <div class="checkbox-group" role="group" aria-describedby="cf-type-hint cf-type-error">
-                  <label class="check"><input type="checkbox" name="requestType" value="マジック"> マジック</label>
-                  <label class="check"><input type="checkbox" name="requestType" value="ジャグリング"> ジャグリング</label>
-                  <label class="check"><input type="checkbox" name="requestType" value="その他" data-other-toggle>
-                    その他</label>
+              <!-- 公演依頼専用項目グループ -->
+              <div id="performance-fields" class="form-group-performance">
+                <div class="form-row">
+                  <label class="form-label" for="cf-event">イベント名 <span class="req">必須</span></label>
+                  <input class="form-input" id="cf-event" name="eventName" type="text" required
+                    placeholder="例：〇〇子ども会（未定の場合は「未定」と入力）" />
+                  <p class="form-error" data-error-for="eventName" aria-live="polite"></p>
                 </div>
 
-                <p class="form-hint" id="cf-type-hint">複数選択可</p>
-                <p class="form-error" id="cf-type-error" data-error-for="requestType" aria-live="polite"></p>
-
-                <div class="form-row is-hidden" data-other-field>
-                  <label class="form-label" for="cf-other">その他（内容）</label>
-                  <input class="form-input" id="cf-other" name="requestOther" type="text"
-                    placeholder="例: 体験コーナーの相談 など" />
-                  <p class="form-error" data-error-for="requestOther" aria-live="polite"></p>
+                <div class="form-row">
+                  <label class="form-label" for="cf-schedule">開催日程（期間複数日可） <span class="req">必須</span></label>
+                  <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">期間や複数日など、分かる範囲でご記入ください。</p>
+                  <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required
+                    placeholder="例：12月1日〜12月3日（未定の場合は「未定」と入力）"></textarea>
+                  <p class="form-error" data-error-for="eventSchedule" aria-live="polite"></p>
                 </div>
-              </fieldset>
+
+                <div class="form-row">
+                  <label class="form-label" for="cf-venue">会場 <span class="req">必須</span></label>
+                  <textarea class="form-input" id="cf-venue" name="venue" rows="4" required
+                    placeholder="例：住所・最寄り駅・屋内/屋外など（未定の場合は「未定」と入力）"></textarea>
+                  <p class="form-error" data-error-for="venue" aria-live="polite"></p>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label" for="cf-audience">想定人数 <span class="req">必須</span></label>
+                  <input class="form-input" id="cf-audience" name="audience" type="text" required
+                    placeholder="例：50名（未定の場合は「未定」と入力）" />
+                  <p class="form-error" data-error-for="audience" aria-live="polite"></p>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label" for="cf-budget">出演料（ご予算） <span class="req">必須</span></label>
+                  <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">
+                    ボランティア出演も可能です（交通費等は要相談）。<br>頂いた出演料は今後の活動費として大切に活用させていただきます。
+                  </p>
+                  <input class="form-input" id="cf-budget" name="budget" type="text" required
+                    placeholder="例：1〜2万円、3万円、要相談、ボランティア希望（交通費のみ相談）など（未定の場合は「未定」と入力）" />
+                  <p class="form-error" data-error-for="budget" aria-live="polite"></p>
+                </div>
+
+                <fieldset class="form-row form-fieldset">
+                  <legend class="form-label">依頼内容 <span class="req">必須</span></legend>
+                  <div class="checkbox-group" role="group" aria-describedby="cf-type-hint cf-type-error">
+                    <label class="check"><input type="checkbox" name="requestType" value="マジック"> マジック</label>
+                    <label class="check"><input type="checkbox" name="requestType" value="ジャグリング"> ジャグリング</label>
+                    <label class="check"><input type="checkbox" name="requestType" value="その他" data-other-toggle>
+                      その他</label>
+                  </div>
+
+                  <p class="form-hint" id="cf-type-hint">複数選択可</p>
+                  <p class="form-error" id="cf-type-error" data-error-for="requestType" aria-live="polite"></p>
+
+                  <div class="form-row is-hidden" data-other-field>
+                    <label class="form-label" for="cf-other">その他（内容）</label>
+                    <input class="form-input" id="cf-other" name="requestOther" type="text"
+                      placeholder="例: 体験コーナーの相談 など" />
+                    <p class="form-error" data-error-for="requestOther" aria-live="polite"></p>
+                  </div>
+                </fieldset>
+              </div>
 
               <div class="form-row">
                 <label class="form-label" for="cf-tel">電話番号 <span class="opt">任意</span></label>
@@ -149,7 +160,8 @@
               </div>
 
               <div class="form-row">
-                <label class="form-label" for="cf-remarks">その他連絡事項 <span class="opt">任意</span></label>
+                <label class="form-label" id="label-remarks" for="cf-remarks">その他連絡事項 <span
+                    class="opt">任意</span></label>
                 <textarea class="form-input" id="cf-remarks" name="remarks" rows="4"
                   placeholder="任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など"></textarea>
                 <p class="form-error" data-error-for="remarks" aria-live="polite"></p>

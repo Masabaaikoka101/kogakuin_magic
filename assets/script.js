@@ -188,6 +188,10 @@
       const otherInput = form.querySelector('input[name="requestOther"]');
       const requestFieldset = form.querySelector('.form-fieldset');
 
+      const performanceFields = document.getElementById('performance-fields');
+      const remarksLabel = document.getElementById('label-remarks');
+      const modeRadios = form.querySelectorAll('input[name="formMode"]');
+
       const getErrorEl = (name) => form.querySelector(`[data-error-for="${name}"]`);
 
       const setFieldError = (input, name, message) => {
@@ -215,6 +219,56 @@
         return (input.value || '').trim();
       };
 
+      const updateFormMode = () => {
+        const mode = readValue('formMode'); // 'performance' or 'general'
+        const isPerformance = mode === 'performance';
+
+        if (performanceFields) {
+          performanceFields.classList.toggle('is-hidden', !isPerformance);
+          // 必須属性の切り替え
+          performanceFields.querySelectorAll('[required], [data-required-cache]').forEach(el => {
+            if (!isPerformance) {
+              if (el.hasAttribute('required')) {
+                el.removeAttribute('required');
+                el.setAttribute('data-required-cache', 'true');
+              }
+            } else {
+              if (el.getAttribute('data-required-cache') === 'true') {
+                el.setAttribute('required', '');
+                el.removeAttribute('data-required-cache');
+              }
+            }
+          });
+        }
+
+        if (remarksLabel) {
+          remarksLabel.innerHTML = isPerformance
+            ? 'その他連絡事項 <span class="opt">任意</span>'
+            : 'お問い合わせ内容 <span class="req">必須</span>';
+
+          const remarksInput = document.getElementById('cf-remarks');
+          if (remarksInput) {
+            if (!isPerformance) {
+              remarksInput.required = true;
+              remarksInput.placeholder = 'お問い合わせ内容をご記入ください';
+            } else {
+              remarksInput.required = false;
+              remarksInput.placeholder = '任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など';
+            }
+          }
+        }
+
+        // モード切替時にエラーをクリア
+        clearAllErrors();
+      };
+
+      modeRadios.forEach(radio => radio.addEventListener('change', updateFormMode));
+      toggleOther();
+      if (otherToggle) otherToggle.addEventListener('change', toggleOther);
+
+      // 初期化
+      updateFormMode();
+
       const validate = () => {
         clearAllErrors();
 
@@ -234,28 +288,37 @@
 
         if (!readValue('name')) markInvalid(nameEl, 'name', 'お名前を入力してください。');
 
+        const mode = readValue('formMode');
+        const isPerformance = mode === 'performance';
+
         if (!readValue('email')) {
           markInvalid(emailEl, 'email', 'メールアドレスを入力してください。');
         } else if (emailEl && !emailEl.checkValidity()) {
           markInvalid(emailEl, 'email', 'メールアドレスの形式が正しくありません。');
         }
 
-        if (!readValue('eventName')) markInvalid(eventEl, 'eventName', 'イベント名を入力してください。');
-        if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', '開催日程を入力してください。');
-        if (!readValue('venue')) markInvalid(venueEl, 'venue', '会場を入力してください。');
-        if (!readValue('audience')) markInvalid(audienceEl, 'audience', '想定人数を入力してください。');
-        if (!readValue('budget')) markInvalid(budgetEl, 'budget', '出演料（ご予算）を入力してください。');
+        if (isPerformance) {
+          if (!readValue('eventName')) markInvalid(eventEl, 'eventName', 'イベント名を入力してください。');
+          if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', '開催日程を入力してください。');
+          if (!readValue('venue')) markInvalid(venueEl, 'venue', '会場を入力してください。');
+          if (!readValue('audience')) markInvalid(audienceEl, 'audience', '想定人数を入力してください。');
+          if (!readValue('budget')) markInvalid(budgetEl, 'budget', '出演料（ご予算）を入力してください。');
 
-        const types = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
-        if (!types.length) {
-          const err = getErrorEl('requestType');
-          if (err) err.textContent = '依頼内容を1つ以上選択してください。';
-          if (requestFieldset) requestFieldset.classList.add('is-invalid');
-          if (!firstInvalid && requestFieldset) firstInvalid = requestFieldset;
-        }
+          const types = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
+          if (!types.length) {
+            const err = getErrorEl('requestType');
+            if (err) err.textContent = '依頼内容を1つ以上選択してください。';
+            if (requestFieldset) requestFieldset.classList.add('is-invalid');
+            if (!firstInvalid && requestFieldset) firstInvalid = requestFieldset;
+          }
 
-        if (otherInput && otherInput.required && !readValue('requestOther')) {
-          markInvalid(otherInput, 'requestOther', '「その他」を選択した場合は内容を入力してください。');
+          if (otherInput && otherInput.required && !readValue('requestOther')) {
+            markInvalid(otherInput, 'requestOther', '「その他」を選択した場合は内容を入力してください。');
+          }
+        } else {
+          // 一般お問い合わせの場合、remarks（お問い合わせ内容）が必須
+          const remarksEl = form.querySelector('#cf-remarks');
+          if (!readValue('remarks')) markInvalid(remarksEl, 'remarks', 'お問い合わせ内容を入力してください。');
         }
 
         if (firstInvalid) {
@@ -269,13 +332,11 @@
         return true;
       };
 
-      toggleOther();
-      if (otherToggle) otherToggle.addEventListener('change', toggleOther);
-
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
+        // Note: Replace this URL with your updated Web App URL if it changes
         const endpoint = 'https://script.google.com/macros/s/AKfycbwheFaPhK8tAeYXE4kAK8epoCQnlQeBtHnad1P3eXVTvDPQIfvbY-e7k-ZnviIZcojWwA/exec';
 
         const schedule = readValue('eventSchedule');
@@ -288,6 +349,7 @@
 
         // 送信先GAS（ユーザー提供スクリプト）に合わせたキー名へ整形
         const payload = {
+          formType: readValue('formMode'),
           name: readValue('name'),
           email: readValue('email'),
           eventName: readValue('eventName'),
@@ -346,6 +408,9 @@
           clearAllErrors();
           if (requestFieldset) requestFieldset.classList.remove('is-invalid');
           toggleOther();
+          // リセット後にモードを初期状態（公演依頼）に戻す、あるいはリセット時のラジオボタンの状態に合わせる
+          updateFormMode();
+
         } catch (err) {
           const msg = err && typeof err.message === 'string' ? err.message : '';
           alert(`送信に失敗しました。${msg ? `\n${msg}` : ''}\n通信状況と送信先（GAS）の設定を確認してください。`);
