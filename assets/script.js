@@ -220,6 +220,7 @@
       };
 
       const updateFormMode = () => {
+        から
         const mode = readValue('formMode'); // 'performance' or 'general'
         const isPerformance = mode === 'performance';
 
@@ -363,10 +364,6 @@
           clientTimestamp: new Date().toISOString(),
         };
 
-        const requestId = (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
-          ? crypto.randomUUID()
-          : `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-
         const originalBtnText = submitBtn ? submitBtn.textContent : '';
         if (submitBtn) {
           submitBtn.disabled = true;
@@ -374,7 +371,7 @@
         }
 
         try {
-          const body = JSON.stringify({ ...payload, requestId });
+          const body = JSON.stringify({ ...payload });
 
           let confirmed = false;
           try {
@@ -403,7 +400,7 @@
             });
           }
 
-          alert(`${confirmed ? '送信しました' : '送信を試行しました（結果の確認ができません）'}。担当者より順次ご返信いたします。\n受付ID: ${requestId}`);
+          alert(`${confirmed ? '送信しました' : '送信を試行しました（結果の確認ができません）'}。担当者より順次ご返信いたします。`);
           form.reset();
           clearAllErrors();
           if (requestFieldset) requestFieldset.classList.remove('is-invalid');
