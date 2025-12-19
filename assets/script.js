@@ -220,7 +220,6 @@
       };
 
       const updateFormMode = () => {
-        から
         const mode = readValue('formMode'); // 'performance' or 'general'
         const isPerformance = mode === 'performance';
 
