@@ -7,7 +7,7 @@
 | 項目 | 内容 |
 | --- | --- |
 | 制作者 | 工学院大学情報学部所属のマジシャンTN（公式サイトのリニューアルを担当） |
-| ページ構成 | `index.html`（ホーム） / `about.html`（活動紹介） / `contact.html`（公演依頼） |
+| ページ構成 | `index.html`（ホーム） / `about.html`（活動紹介） / `contact.html`（公演依頼） / `header.html`（共通ヘッダー） |
 | 想定ユーザー | 新入生、地域イベント主催者、採用担当者（短時間で活動実績と対応フローを知りたい人） |
 | 現状の公開状況 | 2025-12-16 時点ではホスティング準備中。完成後はサークル公式サイトとして公開予定。 |
 | 画面デモ | `images/hero-image.png` と `assets/videos/landing-intro.mp4` で主要ビジュアルを確認可能 |
@@ -33,15 +33,16 @@
 | テーマ切替と永続化 | `assets/script.js` / `assets/style.css` | `localStorage` と `data-theme` で全要素を一括制御。画像も `data-src-dark/white` で同期し、`aria-pressed` を更新して支援技術に状態を伝えます。 |
 | 初回限定フルスクリーン動画 | `assets/main.js` | `sessionStorage` で再生済み判定し、1セッション1回のみ再生。`ended` / `error` イベントで確実にオーバーレイを除去します。 |
 | ナビ/フッターの自動更新 | `assets/script.js` | `data-page` 由来で `aria-current` を付与、フッター年号を動的更新し、メンテナンス負荷を下げました。 |
+| 共通ヘッダーの動的読み込み | `header.html` / `assets/script.js` | サイト共通のヘッダーを別ファイル化し、JavaScriptの `fetch` で各ページへ動的に読み込むことで、保守性を向上させました。 |
 | ギャラリーのキャプション化 | `about.html` / `assets/script.js` | 画像を動的に `<figure>` へラップし、`alt` テキストを `figcaption` に転用。HTMLを簡潔に保ちながら意味付けを追加。 |
 | スクロールアニメーション基盤 | `assets/scroll.css` / `assets/script.js` | `data-animate` をJSで付与し、IntersectionObserverで入場を監視。CSSで遅延やトランスフォームを制御し、JSロジックを最小化。 |
 
 ## 6. 使用技術とその役割
 | 技術 | 役割 | 採用理由 |
 | --- | --- | --- |
-| HTML5 | 3ページの静的構成 | 未経験からDOMとセマンティクスを正しく学ぶため。環境依存なく配布可能。 |
+| HTML5 | 3ページ+共通部品の静的構成 | 未経験からDOMとセマンティクスを正しく学ぶため。環境依存なく配布可能。 |
 | CSS3（Custom Properties / Flexbox / Grid） | テーマ切替、レイアウト、アニメーション | フレームワークに頼らず設計力を鍛える狙い。変数化でダーク/ライト両テーマを一元管理。 |
-| Vanilla JavaScript | テーマ制御、初回動画、IntersectionObserver | 依存ライブラリなしでブラウザAPIを理解するために純JSを選択。 |
+| Vanilla JavaScript | テーマ制御、初回動画、ヘッダー読み込み、IntersectionObserver | 依存ライブラリなしでブラウザAPIを理解するために純JSを選択。 |
 | 画像・動画アセット | 実績紹介とブランド印象の強化 | 実際の公演写真と動画を使って第三者の信頼感を高める。ファイル最適化は今後の課題として残す。 |
 
 ## 7. 苦労した点と学んだこと
@@ -53,6 +54,7 @@
 ```
 kogakuin_magic/
 ├─ index.html / about.html / contact.html   # 役割ごとにHTMLを分離
+├─ header.html                              # 共通ヘッダー
 ├─ assets/
 │  ├─ style.css / scroll.css                # 基本スタイルと演出スタイルを分割
 │  ├─ script.js / main.js                   # 汎用ロジックと初回演出を分割
