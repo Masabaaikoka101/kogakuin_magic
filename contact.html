@@ -92,24 +92,34 @@
 
               <div class="form-row">
                 <label class="form-label" for="cf-schedule">開催日程（期間複数日可） <span class="req">必須</span></label>
+                <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">期間や複数日など、分かる範囲でご記入ください。</p>
                 <textarea class="form-input" id="cf-schedule" name="eventSchedule" rows="3" required
                   placeholder="例：12月1日〜12月3日（未定の場合は「未定」と入力）"></textarea>
-                <p class="form-hint">期間や複数日など、分かる範囲でご記入ください。</p>
                 <p class="form-error" data-error-for="eventSchedule" aria-live="polite"></p>
               </div>
 
               <div class="form-row">
                 <label class="form-label" for="cf-venue">会場 <span class="req">必須</span></label>
                 <textarea class="form-input" id="cf-venue" name="venue" rows="4" required
-                  placeholder="住所・最寄り駅・屋内/屋外など（未定の場合は「未定」と入力）"></textarea>
+                  placeholder="例：住所・最寄り駅・屋内/屋外など（未定の場合は「未定」と入力）"></textarea>
                 <p class="form-error" data-error-for="venue" aria-live="polite"></p>
               </div>
 
               <div class="form-row">
                 <label class="form-label" for="cf-audience">想定人数 <span class="req">必須</span></label>
                 <input class="form-input" id="cf-audience" name="audience" type="text" required
-                  placeholder="例: 50名（未定の場合は「未定」と入力）" />
+                  placeholder="例：50名（未定の場合は「未定」と入力）" />
                 <p class="form-error" data-error-for="audience" aria-live="polite"></p>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="cf-budget">出演料（ご予算） <span class="req">必須</span></label>
+                <p class="form-hint" style="margin-top:0; margin-bottom:0.5rem;">
+                  ご予算の範囲内で調整させていただきます。ボランティア出演も可能です（交通費等をご相談させていただく場合がございます）。頂いた出演料は今後の活動費として大切に活用させていただきます。
+                </p>
+                <input class="form-input" id="cf-budget" name="budget" type="text" required
+                  placeholder="例：1〜2万円、3万円、要相談、ボランティア希望（交通費のみ相談）など（未定の場合は「未定」と入力）" />
+                <p class="form-error" data-error-for="budget" aria-live="polite"></p>
               </div>
 
               <fieldset class="form-row form-fieldset">

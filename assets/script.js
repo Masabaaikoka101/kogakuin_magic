@@ -230,6 +230,7 @@
         const scheduleEl = form.querySelector('#cf-schedule');
         const venueEl = form.querySelector('#cf-venue');
         const audienceEl = form.querySelector('#cf-audience');
+        const budgetEl = form.querySelector('#cf-budget');
 
         if (!readValue('name')) markInvalid(nameEl, 'name', 'お名前を入力してください。');
 
@@ -243,6 +244,7 @@
         if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', '開催日程を入力してください。');
         if (!readValue('venue')) markInvalid(venueEl, 'venue', '会場を入力してください。');
         if (!readValue('audience')) markInvalid(audienceEl, 'audience', '想定人数を入力してください。');
+        if (!readValue('budget')) markInvalid(budgetEl, 'budget', '出演料（ご予算）を入力してください。');
 
         const types = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
         if (!types.length) {
@@ -279,6 +281,7 @@
         const schedule = readValue('eventSchedule');
         const venue = readValue('venue');
         const audience = readValue('audience');
+        const budget = readValue('budget');
         const otherText = readValue('requestOther');
         const selectedTypes = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
         const typesForGas = selectedTypes.map((t) => (t === 'その他' && otherText ? `その他: ${otherText}` : t));
@@ -291,6 +294,7 @@
           eventDate: schedule,
           place: venue,
           people: audience,
+          budget: budget,
           type: typesForGas,
           tel: readValue('tel'),
           remarks: readValue('remarks'),
