@@ -25,6 +25,7 @@
   --field-border: rgba(255, 255, 255, 0.18);
   --field-focus-ring: rgba(120, 169, 255, 0.25);
   /* focus-ringの色も合わせる */
+  --color-text-muted: var(--color-secondary);
 }
 
 /*================================================
@@ -81,6 +82,7 @@ html[data-theme="white"] {
   --field-bg: rgba(17, 17, 17, 0.03);
   --field-border: rgba(17, 17, 17, 0.18);
   --field-focus-ring: rgba(74, 128, 214, 0.2);
+  --color-text-muted: #444444;
   color-scheme: light;
 }
 
@@ -538,9 +540,9 @@ body[data-page="contact"] .form-switch input[type="radio"]:checked+label {
 }
 
 html[data-theme="white"] body[data-page="contact"] .form-switch input[type="radio"]:checked+label {
-  background-color: #ffffff;
-  color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #444444;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* ホバー時のフィードバック */
@@ -556,7 +558,7 @@ body[data-page="contact"] .form-switch input[type="radio"]:checked+label:hover {
 }
 
 html[data-theme="white"] body[data-page="contact"] .form-switch input[type="radio"]:checked+label:hover {
-  background-color: #ffffff;
+  background-color: #444444;
 }
 
 body[data-page="contact"] .form-grid {
@@ -873,5 +875,10 @@ html[data-theme="dark"] .showcase-list {
 
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  body[data-page="contact"] .form-switch label {
+    font-size: 0.8rem;
+    padding: 0.6rem 0.4rem;
   }
 }
