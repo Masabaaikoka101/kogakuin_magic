@@ -136,8 +136,8 @@
         const rawX = clientX - rect.left;
         const rawY = clientY - rect.top;
         
-        // Updated scale to 0.25 for mapping logic
-        const scale = 0.25;
+        // Updated scale to 0.20 for mapping logic
+        const scale = 0.20;
         const localX = rawX / scale;
         const localY = rawY / scale;
         

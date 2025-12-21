@@ -183,8 +183,8 @@ body[data-page="contact"] [data-nav="contact"] {
 }
 
 .nav-right img {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 }
 
 .mode-toggle {
@@ -851,6 +851,8 @@ html[data-theme="dark"] .showcase-list {
     justify-content: flex-end;
     gap: 0.75rem;
     align-self: flex-start;
+    /* Reserve space for lightbulb */
+    padding-right: 40px;
   }
 
   .mode-toggle {
