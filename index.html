@@ -78,12 +78,32 @@
   </script>
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/scroll.css" />
+  <link rel="stylesheet" href="assets/lightbulb.css">
   <meta name="description" content="工学院大学マジシャンズ・ソサエティ公式サイト。マジック＆ジャグリングを中心に活動中。新入生募集中！" />
   <!-- GSAP for Snow Animation (Temporary Feature) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 <body data-page="home" data-theme="dark">
+
+  <!-- Lightbulb Switch System -->
+  <div id="lightbulb-system">
+    <div class="lb-ceiling-line"></div>
+    <div class="lb-assembly">
+      <div class="lb-glass"></div>
+      <div class="lb-neck"></div>
+      <div class="lb-filament">
+        <div class="lb-filament-stick lb-f-left"></div>
+        <div class="lb-filament-stick lb-f-right"></div>
+      </div>
+      <div class="lb-socket"></div>
+    </div>
+    <svg class="lb-cord-system">
+      <path id="lb-cordPath" d="M50,320 Q50,320 50,410" stroke="#333" stroke-width="2" fill="none"
+        stroke-linecap="round" />
+    </svg>
+    <div class="lb-handle" id="lb-handle"></div>
+  </div>
   <header id="global-header" class="site-header"></header>
 
 
@@ -117,9 +137,9 @@
 
 
   <script src="assets/script.js" defer></script>
-
   <script src="assets/main.js" defer></script>
-  <script src="assets/snow-title.js" defer></script>
+  <script src="assets/snow-title.js"></script>
+  <script src="assets/lightbulb.js"></script>
 </body>
 
 </html>

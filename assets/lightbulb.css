@@ -1,0 +1,259 @@
+:root {
+  /* Lightbulb Variables */
+  /* Colors */
+  --lb-bulb-off: #cbd0d0;
+  --lb-bulb-on: #eefec2;
+  --lb-socket: #555555;
+  --lb-cord: #333;
+  --lb-highlight: rgba(255, 255, 255, 0.4);
+
+  /* Glows */
+  --lb-glow-off: inset -10px -10px 15px rgba(0, 0, 0, 0.1), inset 10px 10px 15px rgba(255, 255, 255, 0.2);
+  --lb-glow-on: 0 0 60px 20px rgba(238, 254, 194, 0.5);
+  --lb-filament-off: #888;
+  --lb-filament-on: #fff;
+}
+
+html[data-theme="white"] {
+  --lb-bulb-glass: var(--lb-bulb-on);
+  --lb-bulb-shadow: var(--lb-glow-on);
+  --lb-filament: var(--lb-filament-on);
+  --lb-filament-shadow: 0 0 8px #fff;
+  /* Light mode is active */
+}
+
+html[data-theme="dark"] {
+  --lb-bulb-glass: var(--lb-bulb-off);
+  --lb-bulb-shadow: var(--lb-glow-off);
+  --lb-filament: var(--lb-filament-off);
+  --lb-filament-shadow: none;
+}
+
+/* Fallback if no attribute */
+html:not([data-theme]) {
+  --lb-bulb-glass: var(--lb-bulb-off);
+  --lb-bulb-shadow: var(--lb-glow-off);
+  --lb-filament: var(--lb-filament-off);
+  --lb-filament-shadow: none;
+}
+
+
+/* Wrapper to hold the bulb fixed on screen */
+#lightbulb-system {
+  position: fixed;
+  top: 15px;
+  right: 10px;
+  /* Moved further right to avoid X icon */
+  width: 100px;
+  height: 300px;
+  z-index: 9999;
+  pointer-events: none;
+
+  transform: scale(0.25);
+  transform-origin: top center;
+}
+
+/* Ceiling Line - Hidden as per request */
+.lb-ceiling-line {
+  display: none;
+}
+
+/* Base Assembly */
+.lb-assembly {
+  position: relative;
+  /* Removed top margin since ceiling line is gone */
+  margin-top: 0px;
+  width: 160px;
+  height: 240px;
+  left: 50%;
+  margin-left: -80px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Glass */
+.lb-glass {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 130px;
+  background-color: var(--lb-bulb-glass);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: var(--lb-bulb-shadow);
+  transition: background-color 0.4s, box-shadow 0.4s;
+}
+
+/* Highlight */
+.lb-glass::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  width: 35px;
+  height: 55px;
+  background: var(--lb-highlight);
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+
+/* Neck */
+.lb-neck {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 70px;
+  background-color: var(--lb-bulb-glass);
+  z-index: 2;
+  clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+  transition: background-color 0.4s;
+}
+
+/* Socket */
+.lb-socket {
+  position: absolute;
+  top: 144px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 68px;
+  height: 55px;
+  background-color: var(--lb-socket);
+  border-radius: 0 0 25px 25px;
+  border: 3px solid #333;
+  z-index: 3;
+  box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.lb-socket::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  right: -6px;
+  height: 14px;
+  background-color: #444;
+  border-radius: 8px;
+  border: 2px solid #333;
+  z-index: 4;
+}
+
+/* Filament */
+.lb-filament {
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.lb-filament-stick {
+  width: 4px;
+  height: 45px;
+  background-color: var(--lb-filament);
+  box-shadow: var(--lb-filament-shadow);
+  border-radius: 2px;
+  transition: background-color 0.4s, box-shadow 0.4s;
+}
+
+.lb-f-left {
+  transform: rotate(-18deg);
+  transform-origin: top center;
+  margin-top: 5px;
+}
+
+.lb-f-right {
+  transform: rotate(18deg);
+  transform-origin: top center;
+  margin-top: 5px;
+}
+
+/* SVG Cord */
+.lb-cord-system {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Will need specific height or overflow visible */
+  overflow: visible;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Handle (Knob) - Made larger for visibility */
+.lb-handle {
+  position: absolute;
+  /* Visual target size ~12-15px -> 12 * 4 = 48px */
+  width: 48px;
+  height: 48px;
+  background-color: #fff;
+  border: 4px solid #ccc;
+  /* Thicker border */
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  /* Stronger shadow */
+  cursor: grab;
+  touch-action: none;
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.lb-handle:active {
+  cursor: grabbing;
+  background-color: #eee;
+  transform: scale(1.1);
+}
+
+/* Tooltip "Pull!" */
+.lb-handle::after {
+  content: "PULL";
+  position: absolute;
+  top: 50%;
+  right: 60px;
+  /* Appear to the left of the handle */
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-weight: bold;
+  font-size: 32px;
+  /* Large font to survive scaling */
+  padding: 8px 16px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  white-space: nowrap;
+}
+
+/* Show tooltip on hover or drag */
+.lb-handle:hover::after,
+.lb-handle:active::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-10px);
+}
+
+/* Ensure handle is visible even in dark mode */
+html[data-theme="dark"] .lb-handle {
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  background-color: #ddd;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  #lightbulb-system {
+    /* Move down to clear the header icons */
+    top: 60px;
+    right: -15px;
+    /* Push even further right */
+    transform: scale(0.25);
+  }
+}
