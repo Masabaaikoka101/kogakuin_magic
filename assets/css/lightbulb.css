@@ -27,6 +27,7 @@ html[data-theme="dark"] {
   --lb-bulb-shadow: var(--lb-glow-off);
   --lb-filament: var(--lb-filament-off);
   --lb-filament-shadow: none;
+  --lb-cord: #d0d0d0;
 }
 
 /* Fallback if no attribute */
@@ -177,6 +178,14 @@ html:not([data-theme]) {
 }
 
 /* SVG Cord */
+#lb-cordPath {
+  stroke: var(--lb-cord);
+  stroke-width: 2px;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke 0.4s;
+}
+
 .lb-cord-system {
   position: absolute;
   top: 0;

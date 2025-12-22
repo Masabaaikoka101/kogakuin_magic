@@ -180,7 +180,9 @@
   };
 
   // --- Init ---
-  document.addEventListener('DOMContentLoaded', () => {
+  const init = () => {
+    if (els.container) return; // Already initialized
+
     els.container = document.getElementById('lightbulb-system');
     if (!els.container) return;
 
@@ -197,5 +199,8 @@
     window.addEventListener('touchend', onEnd);
 
     requestAnimationFrame(updatePhysics);
-  });
+  };
+
+  document.addEventListener('DOMContentLoaded', init);
+  window.addEventListener('kms:header-loaded', init);
 })();

@@ -25,6 +25,7 @@
       .then(response => response.text())
       .then(html => {
         headerContainer.innerHTML = html;
+        window.dispatchEvent(new CustomEvent('kms:header-loaded'));
         initHeader();
         // ロゴの色反転など、画像関連の初期化も必要ならここで再実行
       })
