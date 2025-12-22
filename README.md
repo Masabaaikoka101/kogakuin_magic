@@ -72,3 +72,4 @@ kogakuin_magic/
 2. **画像の最適化**: WebP形式への完全移行と、レスポンシブな画像配信（srcset）。
 3. **多言語対応**: 留学生や海外からのアクセスを想定した英語対応。
 4. **CI/CDの導入**: GitHub Actionsを用いたLighthouseスコアの定点観測。
+
