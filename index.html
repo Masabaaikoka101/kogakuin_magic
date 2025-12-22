@@ -5,11 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HOME | 工学院大学マジシャンズ・ソサエティ</title>
-  <link rel="icon" type="image/png" href="images/logo.png" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
     rel="stylesheet">
+  <!-- Preload Hero Image for Performance -->
+  <link rel="preload" as="image" href="assets/images/hero-image.png">
   <script>
     (function () {
       var KEY = 'kms-theme';
@@ -76,9 +78,9 @@
       }
     })();
   </script>
-  <link rel="stylesheet" href="assets/style.css" />
-  <link rel="stylesheet" href="assets/scroll.css" />
-  <link rel="stylesheet" href="assets/lightbulb.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/scroll.css" />
+  <link rel="stylesheet" href="assets/css/lightbulb.css">
   <meta name="description" content="工学院大学マジシャンズ・ソサエティ公式サイト。マジック＆ジャグリングを中心に活動中。新入生募集中！" />
   <!-- GSAP for Snow Animation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -112,9 +114,9 @@
       <h1><span>工学院大学</span><span>マジシャンズ・ソサエティ</span></h1>
       <div class="container hero-inner">
         <div class="hero-media" aria-label="メインビジュアル">
-          <img src="images/hero-image.png" alt="工学院大学マジシャンズ・ソサエティの活動風景" data-src-dark="images/hero-image.png"
-            data-src-white="images/hero-image-light.png"
-            style="aspect-ratio:16/9; width:100%; border-radius:var(--radius); object-fit:cover;">
+          <img src="assets/images/hero-image.png" alt="工学院大学マジシャンズ・ソサエティの活動風景"
+            data-src-dark="assets/images/hero-image.png" data-src-white="assets/images/hero-image-light.png"
+            style="aspect-ratio:16/9; width:100%; border-radius:var(--radius); object-fit:cover;" fetchpriority="high">
         </div>
         <div class="hero-copy">
           <p>私たちはマジックやジャグリングを中心に、みんなで楽しく活動しています。</p>
@@ -137,9 +139,9 @@
   </footer>
 
 
-  <script src="assets/script.js" defer></script>
-  <script src="assets/snow-title.js"></script>
-  <script src="assets/lightbulb.js"></script>
+  <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/snow-title.js"></script>
+  <script src="assets/js/lightbulb.js"></script>
 </body>
 
 </html>
