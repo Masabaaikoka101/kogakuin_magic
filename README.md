@@ -33,11 +33,12 @@
 ## 5. 実装した主な機能
 | 機能 | ファイル/技術 | 詳細 |
 | --- | --- | --- |
-| **テーマ切替システム** | `lightbulb.js` / `lightbulb.css` | 物理演算風の紐アニメーションとCSS変数による配色一括置換。LocalStorageで設定を保存。 |
+| **テーマ切替システム** | `lightbulb.js` / `lightbulb.css` | 物理演算風の紐アニメーションとCSS変数による配色一括置換。切替時の効果音（SE）も実装。 |
 | **共通ヘッダー読み込み** | `script.js` / `header.html` | `header.html` をFetch APIで動的に読み込み、 `aria-current` で現在地を自動強調。 |
 | **お問い合わせフォーム** | `script.js` / Google Apps Script | 「公演依頼モード」と「通常モード」で必須項目を動的に切り替え。GASエンドポイントへ非同期送信。 |
 | **スクロール演出** | `script.js` / `scroll.css` | IntersectionObserverを用い、フワッと要素が出現するアニメーションを効率的に実装。 |
 | **雪のアニメーション** | `snow-title.js` | 冬季限定でCanvasによりタイトル上に雪を降らせる演出。HTML要素との衝突判定（積もる表現）も実装。 |
+| **SEO・OGP対策** | `index.html` 等 | 各ページにメタタグ（description, canonical, OGP）を完備。sitemap.xmlとrobots.txtも配置済み。 |
 
 ## 6. フォルダ構成
 ```
@@ -46,6 +47,8 @@ kogakuin_magic/
 ├─ about.html                 # 活動・実績紹介
 ├─ contact.html               # お問い合わせフォーム（GAS連携）
 ├─ header.html                # 共通ヘッダー（JSで読み込み）
+├─ sitemap.xml                # サイトマップ
+├─ robots.txt                 # クローラー設定
 ├─ assets/
 │  ├─ css/
 │  │  ├─ style.css            # ベーススタイル・変数定義
@@ -53,10 +56,11 @@ kogakuin_magic/
 │  │  └─ lightbulb.css        # 電球スイッチのスタイル
 │  ├─ js/
 │  │  ├─ script.js            # 共通ロジック、フォーム制御、ルーティング
-│  │  ├─ lightbulb.js         # テーマ切替スイッチの物理挙動
+│  │  ├─ lightbulb.js         # テーマ切替スイッチの物理挙動・音声再生
 │  │  └─ snow-title.js        # タイトルの雪アニメーション
 │  ├─ images/                 # 写真、ロゴ、背景画像
-│  └─ videos/                 # オープニング動画など
+│  ├─ videos/                 # オープニング動画など
+│  └─ audio/                  # 効果音（スイッチ音など）
 └─ LICENSE
 ```
 
