@@ -15,19 +15,7 @@
       currentNavLink.setAttribute("aria-current", "page");
     }
 
-    // Theme Logic - Moved to lightbulb.js & inline script
-    // Minimal Image Swapper for initial load
-    const swapTargets = document.querySelectorAll('[data-src-dark][data-src-white]');
-    const swapper = () => {
-      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-      swapTargets.forEach(img => {
-        const nextSrc = theme === 'white' ? img.getAttribute('data-src-white') : img.getAttribute('data-src-dark');
-        if (nextSrc && img.getAttribute('src') !== nextSrc) {
-          img.setAttribute('src', nextSrc);
-        }
-      });
-    };
-    swapper();
+
   };
 
   // Load Header and then init
