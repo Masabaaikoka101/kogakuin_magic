@@ -41,17 +41,18 @@ html:not([data-theme]) {
 
 /* Wrapper to hold the bulb fixed on screen */
 #lightbulb-system {
-  position: fixed;
-  top: 20px;
-  right: 10px;
-  /* Moved further right to avoid X icon */
+  position: relative;
+  /* (60px - 32px) / 2 = 14px offset to align tops when centered */
+  top: 14px;
   width: 100px;
-  height: 300px;
-  z-index: 9999;
+  height: 60px;
+  z-index: 999;
   pointer-events: none;
 
   transform: scale(0.20);
   transform-origin: top center;
+  margin-left: -40px;
+  margin-right: -40px;
 }
 
 /* Ceiling Line - Hidden as per request */
@@ -259,10 +260,7 @@ html[data-theme="dark"] .lb-handle {
 /* Mobile Adjustments */
 @media (max-width: 768px) {
   #lightbulb-system {
-    /* Align with header icons */
-    top: 15px;
-    right: -15px;
-    /* Push even further right */
+    /* No specific overrides needed if flexbox handles it */
     transform: scale(0.20);
   }
 }
