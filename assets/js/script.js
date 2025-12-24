@@ -109,39 +109,60 @@
       overlay.playsInline = true;
       overlay.controls = false;
       overlay.preload = 'auto';
-      // Style is mostly handled by CSS .first-view-overlay but defined inline in original main.js. 
-      // Let's migrate inline styles for safety.
+      // Poster Image
+      overlay.poster = 'assets/images/landing-intro-poster.png';
+      
       Object.assign(overlay.style, {
         position: 'fixed', inset: '0', width: '100vw', height: '100vh',
-        objectFit: 'cover', background: '#000', zIndex: '9999'
+        objectFit: 'cover', background: '#000', zIndex: '9999',
+        transition: 'opacity 0.6s ease' // Fade out transition
       });
 
-      const primarySource = document.createElement('source');
-      primarySource.src = 'assets/videos/landing-intro.mp4';
-      primarySource.type = 'video/mp4';
+      // WebM (Recommended)
+      const webmSource = document.createElement('source');
+      webmSource.src = 'assets/videos/landing-intro.webm';
+      webmSource.type = 'video/webm';
 
-      const fallbackSource = document.createElement('source');
-      fallbackSource.src = 'first_view.mp4';
-      fallbackSource.type = 'video/mp4';
+      // MP4 Fallback (if exists)
+      // Note: kept landing-intro.mp4 logic just in case, though file might be removed. 
+      // User requested switch to webm mainly.
+      // const mp4Source = document.createElement('source');
+      // mp4Source.src = 'assets/videos/landing-intro.mp4';
+      // mp4Source.type = 'video/mp4';
 
-      overlay.appendChild(primarySource);
-      overlay.appendChild(fallbackSource);
+      overlay.appendChild(webmSource);
+      // overlay.appendChild(mp4Source); 
 
       const teardown = () => {
-        releasePendingState();
-        try { overlay.remove(); } catch (_) { }
+        // Fade out
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          releasePendingState();
+          try { overlay.remove(); } catch (_) { }
+        }, 600); // Wait for transition
       };
 
       overlay.addEventListener('ended', () => {
         try { sessionStorage.setItem(firstViewKey, '1'); } catch (_) { }
         teardown();
       });
-      overlay.addEventListener('error', teardown);
+      overlay.addEventListener('error', () => {
+        // If critical video error, remove immediately
+        releasePendingState();
+        try { overlay.remove(); } catch (_) {}
+      });
 
       try {
         document.body.appendChild(overlay);
         overlay.load();
-        overlay.play().catch(() => { }); // Autoplay might fail
+        const p = overlay.play();
+        if (p !== undefined) {
+          p.catch(() => {
+             // Autoplay blocked handling -> just remove overlay or show static?
+             // For now, just remove to show site
+             teardown();
+          });
+        }
       } catch (_) {
         teardown();
       }
