@@ -44,6 +44,7 @@ html:not([data-theme]) {
   position: relative;
   /* (60px - 32px) / 2 = 14px offset to align tops when centered */
   top: 14px;
+  left: 15px;
   width: 100px;
   height: 60px;
   z-index: 999;
