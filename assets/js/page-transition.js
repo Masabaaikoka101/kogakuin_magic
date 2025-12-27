@@ -181,6 +181,9 @@
         if (yearEl) {
             yearEl.textContent = new Date().getFullYear();
         }
+
+        // ページ更新イベントを発火（他のスクリプトが再初期化できるように）
+        window.dispatchEvent(new CustomEvent('kms:page-updated'));
     }
 
     // ============================================
