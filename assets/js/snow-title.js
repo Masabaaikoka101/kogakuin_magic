@@ -1,5 +1,5 @@
 
-// Snow Title Animation
+// Snow Title Animation - ふわふわ雪エフェクト（文字の上にのみ積もる）
 document.addEventListener("DOMContentLoaded", () => {
   // 期間判定 (日本時間の12月〜2月のみ動作)
   const now = new Date();
@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let width, height;
   let particles = [];
   let textMap = null; // テキストのピクセルデータ（Collision用）
+  let textTopEdge = null; // 文字の上端マップ（積もり用）
+  let frameCount = 0; // アニメーション用フレームカウンタ
 
   const init = () => {
     width = heroSection.offsetWidth;
@@ -52,71 +54,109 @@ document.addEventListener("DOMContentLoaded", () => {
     // テキストのマスクを作成
     createTextMap();
 
+    // 文字の上端マップを作成
+    createTextTopEdgeMap();
+
     particles = [];
-    // 初期粒子（量を増やす）
-    for (let i = 0; i < width * 1.0; i++) {
+    // 初期粒子
+    for (let i = 0; i < width * 0.8; i++) {
       particles.push(createParticle(true));
     }
   };
 
   const createTextMap = () => {
-    if (!h1) return;
-
-    // オフスクリーンCanvasでテキスト描画
+    // オフスクリーンCanvasでテキストを描画
     const osCv = document.createElement('canvas');
     osCv.width = width;
     osCv.height = height;
     const osCtx = osCv.getContext('2d');
 
-    const computedStyle = window.getComputedStyle(h1);
-    const fontSize = parseFloat(computedStyle.fontSize);
-    const fontFamily = computedStyle.fontFamily;
-
-    osCtx.font = `700 ${fontSize}px ${fontFamily} `;
-    osCtx.textAlign = "center";
-    osCtx.textBaseline = "middle";
-    osCtx.fillStyle = "white"; // 色は何でも良い（Alphaチェック用）
-
-    const h1Rect = h1.getBoundingClientRect();
     const heroRect = heroSection.getBoundingClientRect();
 
-    const spans = h1.querySelectorAll("span");
-    spans.forEach(span => {
-      const rect = span.getBoundingClientRect();
-      const x = rect.left - heroRect.left + rect.width / 2;
-      const y = rect.top - heroRect.top + rect.height / 2;
-      osCtx.fillText(span.textContent, x, y);
-    });
+    // テキスト（h1）を描画
+    if (h1) {
+      const computedStyle = window.getComputedStyle(h1);
+      const fontSize = parseFloat(computedStyle.fontSize);
+      const fontFamily = computedStyle.fontFamily;
+
+      osCtx.font = `700 ${fontSize}px ${fontFamily} `;
+      osCtx.textAlign = "center";
+      osCtx.textBaseline = "middle";
+      osCtx.fillStyle = "white";
+
+      const spans = h1.querySelectorAll("span");
+      spans.forEach(span => {
+        const rect = span.getBoundingClientRect();
+        const x = rect.left - heroRect.left + rect.width / 2;
+        const y = rect.top - heroRect.top + rect.height / 2;
+        osCtx.fillText(span.textContent, x, y);
+      });
+    }
 
     const idata = osCtx.getImageData(0, 0, width, height);
     textMap = idata.data;
   };
 
-  const isTextPixel = (x, y) => {
-    if (!textMap) return false;
-    const ix = Math.floor(x);
-    const iy = Math.floor(y);
-    if (ix < 0 || ix >= width || iy < 0 || iy >= height) return false;
+  // 各X座標における文字の一番上のY座標を計算
+  const createTextTopEdgeMap = () => {
+    if (!textMap) return;
 
-    // Alpha channel check
-    return textMap[(iy * width + ix) * 4 + 3] > 100;
+    textTopEdge = new Array(width).fill(-1);
+
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        const alpha = textMap[(y * width + x) * 4 + 3];
+        if (alpha > 100) {
+          textTopEdge[x] = y;
+          break; // 一番上のピクセルを見つけたらbreak
+        }
+      }
+    }
+  };
+
+  // 文字の上端に到達したかチェック（内部には入らない）
+  const getTextTopAt = (x) => {
+    if (!textTopEdge) return -1;
+    const ix = Math.floor(x);
+    if (ix < 0 || ix >= width) return -1;
+    return textTopEdge[ix];
   };
 
   const createParticle = (initial = false) => {
+    // ふわふわ感を出すためのパラメータ
+    const size = Math.random() * 3 + 1.5; // 1.5〜4.5px
+
     return {
       x: Math.random() * width,
-      y: initial ? Math.random() * height : -10,
-      size: Math.random() * 2 + 1,
-      speedY: Math.random() * 3 + 2, // 2px~5px/frame
-      speedX: (Math.random() - 0.5) * 1.5, // 横揺れ少し強く
-      isLanded: false
+      y: initial ? Math.random() * height * 0.8 : -10 - Math.random() * 50,
+      size: size,
+      // ゆっくり落下（0.3〜1.0px/frame）- とてもふわふわ
+      baseSpeedY: Math.random() * 0.7 + 0.3,
+      speedY: 0,
+      speedX: 0,
+      // 揺れのパラメータ（各雪片で異なる）- 控えめに
+      swayAmplitude: Math.random() * 0.7 + 0.3, // 揺れ幅 0.3〜1.0（控えめ）
+      swayFrequency: Math.random() * 0.02 + 0.01, // 揺れ周波数
+      swayOffset: Math.random() * Math.PI * 2, // 位相オフセット
+      // 不規則な動きのためのノイズパラメータ
+      noiseSpeed: Math.random() * 0.02 + 0.005,
+      noiseOffset: Math.random() * 1000,
+      // 透明度のバリエーション
+      opacity: Math.random() * 0.3 + 0.7, // 0.7〜1.0
+      isLanded: false,
+      landedY: 0
     };
   };
 
+  // シンプルなノイズ関数（Perlin風の滑らかなランダム）
+  const noise = (t) => {
+    const x = Math.sin(t * 1.1) * 0.5 + Math.sin(t * 2.3) * 0.3 + Math.sin(t * 4.7) * 0.2;
+    return x;
+  };
+
   const render = () => {
+    frameCount++;
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "white";
-    ctx.beginPath();
 
     // 降っている雪の数をカウント
     let fallingCount = 0;
@@ -124,52 +164,68 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!p.isLanded) fallingCount++;
     }
 
-    // 常に一定量の降る雪を維持する (積もった分とは別枠で補充)
-    // 画面幅 * 0.6 個くらいは常に降っていてほしい
-    if (fallingCount < width * 0.6) {
+    // 常に一定量の降る雪を維持する
+    if (fallingCount < width * 0.5) {
       particles.push(createParticle());
     }
 
-    // 粒子数が増えすぎないように安全策（3000個上限）
-    if (particles.length > 3000) {
-      // 古い積もった雪から削除するか、ランダムに削除して間引く
-      // ここでは単純に先頭（古いもの）から消す
+    // 粒子数が増えすぎないように安全策（2500個上限）
+    if (particles.length > 2500) {
       particles.shift();
     }
 
     // 更新と描画
-    // 削除用フラグを使わず、ループ内で処理
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
 
       if (!p.isLanded) {
+        // ふわふわ落下速度計算
+        const time = frameCount + p.noiseOffset;
+
+        // 縦方向：基本速度 + 微妙なゆらぎ
+        const verticalNoise = noise(time * p.noiseSpeed) * 0.2;
+        p.speedY = p.baseSpeedY + verticalNoise;
+
+        // 横方向：サイン波 + ノイズで不規則なゆらゆら（控えめ）
+        const sway = Math.sin(time * p.swayFrequency + p.swayOffset) * p.swayAmplitude;
+        const horizontalNoise = noise(time * p.noiseSpeed * 1.5 + 100) * 0.3;
+        p.speedX = sway + horizontalNoise;
+
         p.y += p.speedY;
         p.x += p.speedX;
 
-        // 衝突判定（テキストに積もる）
-        if (isTextPixel(p.x, p.y)) {
+        // 文字の上端との衝突判定（内部には入らない）
+        const topY = getTextTopAt(p.x);
+        if (topY > 0 && p.y >= topY) { // 文字の上端で判定
           // 積もる確率
-          if (Math.random() < 0.2) {
+          if (Math.random() < 0.15) {
             p.isLanded = true;
+            p.landedY = topY; // 文字の上端に完全にぴったり配置
+            p.y = p.landedY;
           }
         }
 
-        // 画面外リセットor削除
-        if (p.y > height) {
+        // 画面外リセット
+        if (p.y > height + 10) {
           // リサイクル
-          p.y = -10;
+          p.y = -10 - Math.random() * 30;
           p.x = Math.random() * width;
+          p.noiseOffset = Math.random() * 1000;
         }
-        if (p.x > width) p.x = 0;
-        if (p.x < 0) p.x = width;
+        // 横方向のワープ
+        if (p.x > width + 20) p.x = -20;
+        if (p.x < -20) p.x = width + 20;
       }
 
-      // 描画 (rect)
-      ctx.moveTo(p.x, p.y);
-      ctx.rect(p.x, p.y, p.size, p.size);
+      // 描画（丸い雪片）
+      ctx.globalAlpha = p.opacity;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
     }
 
-    ctx.fill();
+    ctx.globalAlpha = 1;
   };
 
   // Loop
