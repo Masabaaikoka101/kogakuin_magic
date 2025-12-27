@@ -885,3 +885,31 @@ html[data-theme="dark"] .showcase-list {
     padding: 0.6rem 0.4rem;
   }
 }
+
+/*================================================
+  View Transitions API（ページ遷移アニメーション）
+=================================================*/
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+}
+
+/* フェードイン・アウト */
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
