@@ -191,6 +191,12 @@
 
     if (!els.handle || !els.path) return;
 
+    // 保存されたテーマを適用（画像切り替えを含む）
+    const storedTheme = getStoredTheme();
+    if (storedTheme) {
+      applyTheme(storedTheme);
+    }
+
     els.handle.addEventListener('mousedown', onStart);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onEnd);
