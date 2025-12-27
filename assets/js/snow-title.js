@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return {
       x: Math.random() * width,
-      y: initial ? Math.random() * height * 0.8 : -10 - Math.random() * 50,
+      y: initial ? -Math.random() * height * 0.5 : -10 - Math.random() * 50,
       size: size,
       // ゆっくり落下（0.3〜1.0px/frame）- とてもふわふわ
       baseSpeedY: Math.random() * 0.7 + 0.3,
@@ -144,7 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // 透明度のバリエーション
       opacity: Math.random() * 0.3 + 0.7, // 0.7〜1.0
       isLanded: false,
-      landedY: 0
+      landedY: 0,
+      // 積もらない雪（約40%は通過する）
+      canLand: Math.random() > 0.4
     };
   };
 
@@ -194,14 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
         p.y += p.speedY;
         p.x += p.speedX;
 
-        // 文字の上端との衝突判定（内部には入らない）
-        const topY = getTextTopAt(p.x);
-        if (topY > 0 && p.y >= topY) { // 文字の上端で判定
-          // 積もる確率
-          if (Math.random() < 0.15) {
-            p.isLanded = true;
-            p.landedY = topY; // 文字の上端に完全にぴったり配置
-            p.y = p.landedY;
+        // 文字の上端との衝突判定（canLandがtrueの雪のみ積もる）
+        if (p.canLand) {
+          const topY = getTextTopAt(p.x);
+          if (topY > 0 && p.y >= topY) { // 文字の上端で判定
+            // 積もる確率
+            if (Math.random() < 0.15) {
+              p.isLanded = true;
+              p.landedY = topY; // 文字の上端に完全にぴったり配置
+              p.y = p.landedY;
+            }
           }
         }
 
@@ -228,8 +232,19 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.globalAlpha = 1;
   };
 
-  // Loop
-  gsap.ticker.add(render);
+  // 雪アニメーションを開始する関数（一度だけ実行）
+  let snowStarted = false;
+  const startSnowAnimation = () => {
+    if (snowStarted) return; // 既に開始済みなら何もしない
+    snowStarted = true;
+
+    document.fonts.ready.then(() => {
+      setTimeout(() => {
+        init();
+        gsap.ticker.add(render);
+      }, 100);
+    });
+  };
 
   // Resize
   let resizeTimer;
@@ -240,8 +255,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   });
 
-  // フォント読み込み後に初期化
-  document.fonts.ready.then(() => {
-    setTimeout(init, 100);
-  });
+  // ファーストビュー動画の状態を確認して開始タイミングを決定
+  const firstViewKey = 'firstViewPlayed';
+  let hasPlayed = false;
+  try {
+    hasPlayed = !!sessionStorage.getItem(firstViewKey);
+  } catch (_) { }
+
+  if (hasPlayed) {
+    // 動画スキップ（セッション再訪）：少し待ってから開始
+    setTimeout(startSnowAnimation, 500);
+  } else {
+    // 初回訪問：動画の終了を待つ
+    const overlay = document.querySelector('.first-view-overlay');
+    if (overlay && overlay.tagName === 'VIDEO') {
+      overlay.addEventListener('ended', () => {
+        setTimeout(startSnowAnimation, 800); // 動画終了後0.8秒待って開始
+      });
+      // フォールバック: 動画が10秒以上かかる場合
+      setTimeout(startSnowAnimation, 10000);
+    } else {
+      // オーバーレイがない場合は少し待って開始
+      setTimeout(startSnowAnimation, 1000);
+    }
+  }
 });
