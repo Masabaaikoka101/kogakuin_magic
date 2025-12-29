@@ -7,13 +7,11 @@
 ## 2. サイト概要とURL
 | 項目 | 内容 |
 | --- | --- |
-| **項目** | **内容** |
-| --- | --- |
-| **制作者** | 工学院大学情報学部所属のマジシャンTN（公式サイトのリニューアルを担当） |
-| **技術スタック** | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/Google_Apps_Script-4285F4?style=for-the-badge&logo=google-drive&logoColor=white"><br>Vanilla JavaScript (SPA) / Google Apps Script (GAS) |
-| **ページ構成** | `index.html` (JP) / `en/index.html` (EN) ほか、各ページに英語対応版あり |
-| **SEO対策** | `sitemap.xml`, `robots.txt`, OGP, 多言語SEO (canonical/lang) 設定済み |
-| **ステータス** | 運用中（工学院大学サーバーにて静的ホスティング） |
+| 制作者 | 工学院大学情報学部所属のマジシャンTN（公式サイトのリニューアルを担当） |
+| 技術スタック | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/Google_Apps_Script-4285F4?style=for-the-badge&logo=google-drive&logoColor=white"><br>Vanilla JavaScript (SPA) / Google Apps Script (GAS) |
+| ページ構成 | `index.html` (JP) / `en/index.html` (EN) ほか、各ページに英語対応版あり |
+| SEO対策 | `sitemap.xml`, `robots.txt`, OGP, 多言語SEO (canonical/lang) 設定済み |
+| ステータス | 運用中（工学院大学サーバーにて静的ホスティング） |
 
 ## 3. 制作背景と目的
 - **リニューアルの動機**: 既存サイトのデザイン刷新に加え、外部からの公演依頼数を増加させることが最大の目的。スマートフォン利用を前提としたUI/UXの最適化も実施。
