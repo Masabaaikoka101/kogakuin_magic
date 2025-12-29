@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-first-view="pending">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>【Official】Kogakuin Magicians' Society | Magic & Juggling</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <!-- Preload Hero Image for Performance -->
+  <link rel="preload" as="image" href="../assets/images/hero-image.png">
+
+  <!-- SEO & OGP -->
+  <link rel="canonical" href="https://www.ns.kogakuin.ac.jp/kogakuin_magic/">
+  <meta property="og:title" content="HOME | Kogakuin Magicians' Society" />
+  <meta property="og:description"
+    content="Official website of Kogakuin Magicians' Society. We focus on magic and juggling. New members welcome!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.ns.kogakuin.ac.jp/kogakuin_magic/" />
+  <meta property="og:image" content="https://www.ns.kogakuin.ac.jp/kogakuin_magic/assets/images/hero-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script>
+    window.ASSETS_PATH = '../';
+    (function () {
+      var KEY = 'kms-theme';
+      var theme = 'dark';
+      try {
+        var stored = localStorage.getItem(KEY);
+        if (stored === 'white' || stored === 'dark') {
+          theme = stored;
+        }
+      } catch (e) { }
+      document.documentElement.setAttribute('data-theme', theme);
+      if (document.body) {
+        document.body.setAttribute('data-theme', theme);
+      }
+    })();
+  </script>
+  <style>
+    html {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    html[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    body[data-theme="white"] {
+      background-color: #f5f7fb;
+      color: #111111;
+    }
+
+    html[data-first-view="pending"] body>* {
+      visibility: hidden;
+    }
+
+    html[data-first-view="pending"] body>.first-view-overlay {
+      visibility: visible;
+    }
+  </style>
+  <script>
+    (function () {
+      var FLAG = 'firstViewPlayed';
+      var root = document.documentElement;
+      var setPending = function () {
+        root.setAttribute('data-first-view', 'pending');
+      };
+      var clearPending = function () {
+        root.removeAttribute('data-first-view');
+      };
+      try {
+        if (sessionStorage.getItem(FLAG)) {
+          clearPending();
+        } else {
+          setPending();
+        }
+      } catch (e) {
+        setPending();
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/scroll.css" />
+  <link rel="stylesheet" href="../assets/css/lightbulb.css">
+  <meta name="description"
+    content="Official website of Kogakuin Magicians' Society. We focus on magic and juggling. New members welcome!" />
+  <!-- GSAP for Snow Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body data-page="home" data-theme="dark">
+
+  <!-- Lightbulb Switch System -> Moved to header.html -->
+  <header id="global-header" class="site-header"></header>
+
+
+  <main>
+    <section class="hero">
+      <h1><span>Kogakuin University</span><span>Magicians' Society</span></h1>
+      <div class="container hero-inner">
+        <div class="hero-media" aria-label="Main Visual">
+          <img src="../assets/images/hero-image.png" alt="Activities of Kogakuin Magicians' Society"
+            data-src-dark="../assets/images/hero-image.png" data-src-white="../assets/images/hero-image-light.png"
+            style="aspect-ratio:16/9; width:100%; border-radius:var(--radius); object-fit:cover;" fetchpriority="high">
+        </div>
+        <div class="hero-copy">
+          <p>We are a fun-loving group focused on magic and juggling.</p>
+          <p>Why not acquire skills that will make people say "Wow!"?</p>
+          <p>Most members start with no experience. Our seniors will teach you gently, so anyone can learn!</p>
+          <p>There are many opportunities to perform at school festivals and local events.</p>
+          <p>New members are always welcome!</p>
+          <p>＼Check out our activities on SNS!／<br>See the latest show info and practice scenes from the official SNS
+            links at the top right!</p>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Kogakuin Magicians' Society</small>
+    </div>
+  </footer>
+
+
+  <script src="../assets/js/script.js" defer></script>
+  <script src="../assets/js/snow-title.js"></script>
+  <script src="../assets/js/lightbulb.js"></script>
+  <script src="../assets/js/page-transition.js"></script>
+</body>
+
+</html>

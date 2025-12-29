@@ -3,6 +3,128 @@
   // bodyタグの data-page 属性を元に、現在のナビゲーションリンクを特定
   const page = document.body.getAttribute("data-page");
 
+  // Translation Dictionary
+  const I18N = {
+    ja: {
+      nav_home: "ホーム",
+      nav_about: "活動紹介",
+      nav_contact: "公演依頼",
+      lang_label: "English",
+      lang_text: "EN",
+      form_mode_performance: "公演依頼",
+      form_mode_general: "その他のお問い合わせ",
+      form_name: "お名前",
+      form_email: "メールアドレス",
+      form_event: "イベント名",
+      form_schedule: "開催日程（期間複数日可）",
+      form_schedule_hint: "期間や複数日など、分かる範囲でご記入ください。",
+      form_venue: "会場",
+      form_audience: "想定人数",
+      form_budget: "出演料（ご予算）",
+      form_budget_hint: "ボランティア出演も可能です（交通費等は要相談）。<br>頂いた出演料は今後の活動費として大切に活用させていただきます。",
+      form_type: "依頼内容",
+      form_type_magic: "マジック",
+      form_type_juggling: "ジャグリング",
+      form_type_other: "その他",
+      form_type_hint: "複数選択可",
+      form_other_detail: "その他（内容）",
+      form_tel: "電話番号",
+      form_remarks_perf: "その他連絡事項",
+      form_remarks_gen: "お問い合わせ内容",
+      form_submit: "送信",
+      form_sending: "送信中...",
+      form_sent: "送信しました",
+      form_sent_detail: "担当者より順次ご返信いたします。",
+      form_error: "送信に失敗しました。",
+      req: "必須",
+      opt: "任意",
+      ph_name: "例：工学院 太郎",
+      ph_email: "例：example@gmail.com",
+      ph_event: "例：〇〇子ども会、未定",
+      ph_schedule: "例：12月1日〜12月3日、未定",
+      ph_venue: "例：住所・最寄り駅、未定",
+      ph_audience: "例：50名、未定",
+      ph_budget: "例：1〜2万円、ボランティア希望、未定",
+      ph_other: "例: 体験コーナーの相談 など",
+      ph_remarks_perf: "任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など",
+      ph_remarks_gen: "お問い合わせ内容をご記入ください"
+    },
+    en: {
+      nav_home: "Home",
+      nav_about: "About",
+      nav_contact: "Contact",
+      lang_label: "日本語",
+      lang_text: "JP",
+      form_mode_performance: "Performance Request",
+      form_mode_general: "Other Inquiries",
+      form_name: "Name",
+      form_email: "Email",
+      form_event: "Event Name",
+      form_schedule: "Dates",
+      form_schedule_hint: "Please provide dates or period if known.",
+      form_venue: "Venue",
+      form_audience: "Audience",
+      form_budget: "Budget",
+      form_budget_hint: "Volunteer performances possible (transportation fees may apply). Fees support our activities.",
+      form_type: "Request Type",
+      form_type_magic: "Magic",
+      form_type_juggling: "Juggling",
+      form_type_other: "Other",
+      form_type_hint: "Multiple selections possible",
+      form_other_detail: "Other Details",
+      form_tel: "Phone Number",
+      form_remarks_perf: "Other Remarks",
+      form_remarks_gen: "Inquiry Content",
+      form_submit: "Submit",
+      form_sending: "Sending...",
+      form_sent: "Sent successfully.",
+      form_sent_detail: "We will get back to you shortly.",
+      form_error: "Failed to send.",
+      req: "Required",
+      opt: "Optional",
+      ph_name: "e.g. Taro Kogakuin",
+      ph_email: "e.g. example@gmail.com",
+      ph_event: "e.g. Kids Party",
+      ph_schedule: "e.g. Dec 1st - Dec 3rd",
+      ph_venue: "e.g. Address, Nearest Station",
+      ph_audience: "e.g. 50 people",
+      ph_budget: "e.g. 10,000 JPY, Volunteer",
+      ph_other: "e.g. Consultation for experience corner",
+      ph_remarks_perf: "Optional: Flow of the day, Equipment (Mic/Audio), NG items, etc.",
+      ph_remarks_gen: "Please describe your inquiry."
+    }
+  };
+
+  const t = (key) => {
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'ja';
+    return I18N[lang][key] || key;
+  };
+
+  const updatePageLanguage = () => {
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'ja';
+    const dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = dict[key];
+        } else {
+          el.innerHTML = dict[key];
+        }
+      }
+    });
+
+    // Handle special cases with spans (req/opt) inside labels
+    document.querySelectorAll('[data-i18n-label]').forEach(el => {
+      const key = el.getAttribute('data-i18n-label'); // e.g., "form_name"
+      const type = el.getAttribute('data-i18n-type'); // "req" or "opt"
+      if (dict[key]) {
+        const suffix = type ? ` <span class="${type}">${dict[type]}</span>` : '';
+        el.innerHTML = dict[key] + suffix;
+      }
+    });
+  };
+
   // Header Loading Logic
   const initHeader = () => {
     const y = document.getElementById("year");
@@ -10,9 +132,25 @@
       y.textContent = new Date().getFullYear();
     }
 
-    const currentNavLink = document.querySelector(`[data-nav="${page}"]`);
+    const currentPage = document.body.getAttribute("data-page");
+    const currentNavLink = document.querySelector(`[data-nav="${currentPage}"]`);
     if (currentNavLink) {
       currentNavLink.setAttribute("aria-current", "page");
+    }
+
+    // Update Language Switcher Link
+    const langLink = document.querySelector('.lang-link');
+    if (langLink) {
+      const isEn = document.documentElement.lang === 'en';
+      // Use client-side translation for the link text
+      langLink.textContent = t('lang_text');
+      langLink.setAttribute('aria-label', t('lang_label'));
+
+      const targetPrefix = isEn ? '../' : 'en/';
+      // Map page to filename
+      const map = { home: 'index.html', about: 'about.html', contact: 'contact.html' };
+      const currentPage = document.body.getAttribute("data-page");
+      langLink.href = targetPrefix + (map[currentPage] || 'index.html');
     }
 
 
@@ -21,11 +159,22 @@
   // Load Header and then init
   const headerContainer = document.getElementById('global-header');
   if (headerContainer) {
-    fetch('header.html')
+    // ALWAYS load the root header.html using relative path if needed
+    const assetsPath = window.ASSETS_PATH || '';
+    fetch(`${assetsPath}header.html`)
       .then(response => response.text())
       .then(html => {
-        headerContainer.innerHTML = html;
+        // Rewrite asset paths in header for subdirectories
+        // e.g. src="assets/..." -> src="../assets/..."
+        const processedHtml = html.replace(/(src|href)=["']assets\//g, (match) => {
+          const quote = match.charAt(match.length - 8); // ' or "
+          return `${match.substring(0, match.length - 7)}${assetsPath}assets/`;
+        });
+
+        headerContainer.innerHTML = processedHtml;
         window.dispatchEvent(new CustomEvent('kms:header-loaded'));
+        // Apply translations to the loaded header
+        updatePageLanguage();
         initHeader();
         // ロゴの色反転など、画像関連の初期化も必要ならここで再実行
       })
@@ -35,6 +184,21 @@
     initHeader();
   }
 
+  // Handle SPA Page Updates
+  window.addEventListener('kms:page-updated', () => {
+    // Update ASSETS_PATH based on new language
+    const isEn = document.documentElement.lang === 'en';
+    window.ASSETS_PATH = isEn ? '../' : '';
+
+    updatePageLanguage();
+    initHeader(); // Re-run header logic
+
+    // Also re-init contact form if on contact page
+    // initContactForm is defined later but available in scope when event fires
+    if (typeof initContactForm === 'function') {
+      initContactForm();
+    }
+  });
 
 
   // スクロールアニメーション（IntersectionObserver）
@@ -109,8 +273,11 @@
       overlay.playsInline = true;
       overlay.controls = false;
       overlay.preload = 'auto';
+      // Asset Path Handling
+      const assetsPath = window.ASSETS_PATH || '';
+
       // Poster Image
-      overlay.poster = 'assets/images/landing-intro-poster.png';
+      overlay.poster = `${assetsPath}assets/images/landing-intro-poster.png`;
 
       Object.assign(overlay.style, {
         position: 'fixed', inset: '0', width: '100vw', height: '100vh',
@@ -120,18 +287,10 @@
 
       // WebM (Recommended)
       const webmSource = document.createElement('source');
-      webmSource.src = 'assets/videos/landing-intro.webm';
+      webmSource.src = `${assetsPath}assets/videos/landing-intro.webm`;
       webmSource.type = 'video/webm';
 
-      // MP4 Fallback (if exists)
-      // Note: kept landing-intro.mp4 logic just in case, though file might be removed. 
-      // User requested switch to webm mainly.
-      // const mp4Source = document.createElement('source');
-      // mp4Source.src = 'assets/videos/landing-intro.mp4';
-      // mp4Source.type = 'video/mp4';
-
       overlay.appendChild(webmSource);
-      // overlay.appendChild(mp4Source); 
 
       const teardown = () => {
         // Fade out
@@ -173,6 +332,9 @@
 
   // CONTACT: カスタムフォーム初期化（関数化して再実行可能に）
   const initContactForm = () => {
+    // Ensure static translations are applied if not yet
+    updatePageLanguage();
+
     const currentPage = document.body.getAttribute('data-page');
     if (currentPage !== 'contact') return;
 
@@ -223,10 +385,10 @@
     const updateFormMode = () => {
       const mode = readValue('formMode'); // 'performance' or 'general'
       const isPerformance = mode === 'performance';
+      const isEn = document.documentElement.lang === 'en';
 
       if (performanceFields) {
         performanceFields.classList.toggle('is-hidden', !isPerformance);
-        // 必須属性の切り替え
         performanceFields.querySelectorAll('[required], [data-required-cache]').forEach(el => {
           if (!isPerformance) {
             if (el.hasAttribute('required')) {
@@ -242,24 +404,27 @@
         });
       }
 
+      const remarksLabel = document.getElementById('label-remarks');
       if (remarksLabel) {
-        remarksLabel.innerHTML = isPerformance
-          ? 'その他連絡事項 <span class="opt">任意</span>'
-          : 'お問い合わせ内容 <span class="req">必須</span>';
+        // Use translate helper for labels
+        const labelKey = isPerformance ? 'form_remarks_perf' : 'form_remarks_gen';
+        const typeKey = isPerformance ? 'opt' : 'req';
+        // Manually constructing HTML to keep spans
+        remarksLabel.innerHTML = `${t(labelKey)} <span class="${typeKey}">${t(typeKey)}</span>`;
 
         const remarksInput = document.getElementById('cf-remarks');
         if (remarksInput) {
           if (!isPerformance) {
             remarksInput.required = true;
-            remarksInput.placeholder = 'お問い合わせ内容をご記入ください';
+            remarksInput.placeholder = t('ph_remarks_gen');
           } else {
             remarksInput.required = false;
-            remarksInput.placeholder = '任意：当日の流れ、設備（マイク/音響など）、NG事項、補足など';
+            remarksInput.placeholder = t('ph_remarks_perf');
           }
         }
       }
 
-      // モード切替時にエラーをクリア
+      // Clear errors on mode switch
       clearAllErrors();
     };
 
@@ -267,7 +432,8 @@
     toggleOther();
     if (otherToggle) otherToggle.addEventListener('change', toggleOther);
 
-    // 初期化
+    // Initial translation for static form elements handled by updatePageLanguage outside, 
+    // but form placeholder logic is dynamic for remarks:
     updateFormMode();
 
     const validate = () => {
@@ -287,39 +453,58 @@
       const audienceEl = form.querySelector('#cf-audience');
       const budgetEl = form.querySelector('#cf-budget');
 
-      if (!readValue('name')) markInvalid(nameEl, 'name', 'お名前を入力してください。');
+      const isEn = document.documentElement.lang === 'en';
+      const msg = {
+        name: isEn ? 'Please enter your name.' : 'お名前を入力してください。',
+        email: isEn ? 'Please enter your email.' : 'メールアドレスを入力してください。',
+        emailFormat: isEn ? 'Invalid email format.' : 'メールアドレスの形式が正しくありません。',
+        event: isEn ? 'Please enter event name.' : 'イベント名を入力してください。',
+        schedule: isEn ? 'Please enter schedule.' : '開催日程を入力してください。',
+        venue: isEn ? 'Please enter venue.' : '会場を入力してください。',
+        audience: isEn ? 'Please enter estimated audience.' : '想定人数を入力してください。',
+        budget: isEn ? 'Please enter budget.' : '出演料（ご予算）を入力してください。',
+        type: isEn ? 'Please select at least one request type.' : '依頼内容を1つ以上選択してください。',
+        other: isEn ? 'Please specify details for "Other".' : '「その他」を選択した場合は内容を入力してください。',
+        remarks: isEn ? 'Please enter your inquiry.' : 'お問い合わせ内容を入力してください。'
+      };
+
+      // Note: We could move 'msg' to I18N too, but for validation logic simplicity kept here or use t()
+      // Let's rely on the previous object for now to minimize diff risk, or update if user complains.
+      // But user wanted consistency. Let's stick with what we have since it's already language-aware.
+
+      if (!readValue('name')) markInvalid(nameEl, 'name', msg.name);
 
       const mode = readValue('formMode');
       const isPerformance = mode === 'performance';
 
       if (!readValue('email')) {
-        markInvalid(emailEl, 'email', 'メールアドレスを入力してください。');
+        markInvalid(emailEl, 'email', msg.email);
       } else if (emailEl && !emailEl.checkValidity()) {
-        markInvalid(emailEl, 'email', 'メールアドレスの形式が正しくありません。');
+        markInvalid(emailEl, 'email', msg.emailFormat);
       }
 
       if (isPerformance) {
-        if (!readValue('eventName')) markInvalid(eventEl, 'eventName', 'イベント名を入力してください。');
-        if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', '開催日程を入力してください。');
-        if (!readValue('venue')) markInvalid(venueEl, 'venue', '会場を入力してください。');
-        if (!readValue('audience')) markInvalid(audienceEl, 'audience', '想定人数を入力してください。');
-        if (!readValue('budget')) markInvalid(budgetEl, 'budget', '出演料（ご予算）を入力してください。');
+        if (!readValue('eventName')) markInvalid(eventEl, 'eventName', msg.event);
+        if (!readValue('eventSchedule')) markInvalid(scheduleEl, 'eventSchedule', msg.schedule);
+        if (!readValue('venue')) markInvalid(venueEl, 'venue', msg.venue);
+        if (!readValue('audience')) markInvalid(audienceEl, 'audience', msg.audience);
+        if (!readValue('budget')) markInvalid(budgetEl, 'budget', msg.budget);
 
         const types = Array.from(form.querySelectorAll('input[name="requestType"]:checked')).map((el) => el.value);
         if (!types.length) {
           const err = getErrorEl('requestType');
-          if (err) err.textContent = '依頼内容を1つ以上選択してください。';
+          if (err) err.textContent = msg.type;
           if (requestFieldset) requestFieldset.classList.add('is-invalid');
           if (!firstInvalid && requestFieldset) firstInvalid = requestFieldset;
         }
 
         if (otherInput && otherInput.required && !readValue('requestOther')) {
-          markInvalid(otherInput, 'requestOther', '「その他」を選択した場合は内容を入力してください。');
+          markInvalid(otherInput, 'requestOther', msg.other);
         }
       } else {
-        // 一般お問い合わせの場合、remarks（お問い合わせ内容）が必須
+        // general inquiry
         const remarksEl = form.querySelector('#cf-remarks');
-        if (!readValue('remarks')) markInvalid(remarksEl, 'remarks', 'お問い合わせ内容を入力してください。');
+        if (!readValue('remarks')) markInvalid(remarksEl, 'remarks', msg.remarks);
       }
 
       if (firstInvalid) {
@@ -367,7 +552,8 @@
       const originalBtnText = submitBtn ? submitBtn.textContent : '';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = '送信中...';
+        const isEn = document.documentElement.lang === 'en';
+        submitBtn.textContent = isEn ? 'Sending...' : '送信中...';
       }
 
       try {
@@ -400,21 +586,25 @@
           });
         }
 
-        alert(`${confirmed ? '送信しました' : '送信を試行しました（結果の確認ができません）'}。担当者より順次ご返信いたします。`);
+        const isEn = document.documentElement.lang === 'en';
+        alert(`${confirmed
+          ? (isEn ? 'Sent successfully.' : '送信しました')
+          : (isEn ? 'Attempted to send (Could not verify result).' : '送信を試行しました（結果の確認ができません）')}。${isEn ? 'We will get back to you shortly.' : '担当者より順次ご返信いたします。'}`);
         form.reset();
         clearAllErrors();
         if (requestFieldset) requestFieldset.classList.remove('is-invalid');
         toggleOther();
-        // リセット後にモードを初期状態（公演依頼）に戻す、あるいはリセット時のラジオボタンの状態に合わせる
         updateFormMode();
 
       } catch (err) {
+        const isEn = document.documentElement.lang === 'en';
         const msg = err && typeof err.message === 'string' ? err.message : '';
-        alert(`送信に失敗しました。${msg ? `\n${msg}` : ''}\n通信状況と送信先（GAS）の設定を確認してください。`);
+        alert(`${isEn ? 'Failed to send.' : '送信に失敗しました。'}${msg ? `\n${msg}` : ''}\n${isEn ? 'Please check your connection.' : '通信状況と送信先（GAS）の設定を確認してください。'}`);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText || '送信';
+          const isEn = document.documentElement.lang === 'en';
+          submitBtn.textContent = originalBtnText || (isEn ? 'Submit' : '送信');
         }
       }
     });

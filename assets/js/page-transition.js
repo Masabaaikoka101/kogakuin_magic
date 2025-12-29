@@ -110,6 +110,12 @@
         // タイトル更新
         document.title = doc.title;
 
+        // lang属性更新
+        const newLang = doc.documentElement.lang;
+        if (newLang) {
+            document.documentElement.lang = newLang;
+        }
+
         // body属性更新
         const newDataPage = doc.body.getAttribute('data-page');
         if (newDataPage) {
@@ -251,18 +257,19 @@
             const html = await fetchPage(url);
             const doc = parseHtml(html);
 
+            const performUpdate = () => {
+                // DOM更新前にURLを更新して、相対パスの解決基準を合わせる
+                if (pushState) {
+                    history.pushState({ url: url }, '', url);
+                }
+                updatePage(doc);
+            };
+
             // View Transitions対応
             if (document.startViewTransition) {
-                await document.startViewTransition(() => {
-                    updatePage(doc);
-                }).finished;
+                await document.startViewTransition(performUpdate).finished;
             } else {
-                updatePage(doc);
-            }
-
-            // 履歴追加
-            if (pushState) {
-                history.pushState({ url: url }, '', url);
+                performUpdate();
             }
 
         } catch (error) {
