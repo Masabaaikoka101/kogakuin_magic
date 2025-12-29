@@ -144,6 +144,18 @@
         // スクリプト再初期化
         reinitScripts();
 
+        // フォーカス管理（アクセシビリティ対応）
+        const newMain = document.querySelector('main');
+        if (newMain) {
+            newMain.setAttribute('tabindex', '-1');
+            newMain.focus({ preventScroll: true });
+            newMain.removeAttribute('tabindex');
+        } else {
+            document.body.setAttribute('tabindex', '-1');
+            document.body.focus({ preventScroll: true });
+            document.body.removeAttribute('tabindex');
+        }
+
         // カスタムイベント発火
         window.dispatchEvent(new CustomEvent('kms:page-updated'));
     }
@@ -248,8 +260,8 @@
         // 遷移中なら無視
         if (isNavigating) return;
 
-        // 同じページなら無視
-        if (isSamePage(url)) return;
+        // 同じページなら無視（ただし履歴移動の場合は除外）
+        if (pushState && isSamePage(url)) return;
 
         isNavigating = true;
 

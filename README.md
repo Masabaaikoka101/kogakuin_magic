@@ -7,10 +7,12 @@
 ## 2. サイト概要とURL
 | 項目 | 内容 |
 | --- | --- |
+| **項目** | **内容** |
+| --- | --- |
 | **制作者** | 工学院大学情報学部所属のマジシャンTN（公式サイトのリニューアルを担当） |
-| **技術スタック** | HTML5, CSS3, Vanilla JavaScript, Google Apps Script (GAS) |
-| **ページ構成** | `index.html`（ホーム） / `about.html`（活動紹介） / `contact.html`（お問い合わせ） / `header.html`（共通ヘッダー） |
-| **SEO対策** | `sitemap.xml`, `robots.txt`, OGP設定済み |
+| **技術スタック** | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/Google_Apps_Script-4285F4?style=for-the-badge&logo=google-drive&logoColor=white"><br>Vanilla JavaScript (SPA) / Google Apps Script (GAS) |
+| **ページ構成** | `index.html` (JP) / `en/index.html` (EN) ほか、各ページに英語対応版あり |
+| **SEO対策** | `sitemap.xml`, `robots.txt`, OGP, 多言語SEO (canonical/lang) 設定済み |
 | **ステータス** | 運用中（工学院大学サーバーにて静的ホスティング） |
 
 ## 3. 制作背景と目的
@@ -18,7 +20,7 @@
 - **課題解決**: 
     - 「公演依頼」と「その他のお問い合わせ」を明確に区分し、依頼時に必要な情報（日時、予算、会場等）をフォーム上で完結させることで、メール往復のコストを削減。
     - 入部希望者が活動内容を直感的に理解できるギャラリーやFAQの整備。
-- **技術的挑戦**: フレームワークに頼らず、標準技術（Vanilla JS, CSS Grid/Flexbox）のみでリッチなインタラクションとSPA風の遷移を実現すること。
+- **技術的挑戦**: フレームワークに頼らず、標準技術（Vanilla JS, History API, View Transitions API）のみでSPA（シングルページアプリケーション）風の高速な遷移と多言語対応を実現すること。
 
 ## 4. デザイン・UIのこだわり
 - **没入感を高める演出**:
@@ -35,9 +37,11 @@
 ## 5. 実装した主な機能
 | 機能 | ファイル/技術 | 詳細 |
 | --- | --- | --- |
+| **SPA遷移システム** | `page-transition.js` | History APIとView Transitions APIを組み合わせ、リロードなしで高速にページ遷移。メタタグやOGP、`lang`属性も動的に更新。 |
+| **多言語対応 (i18n)** | `en/` ディレクトリ + JS制御 | ディレクトリベースの静的ファイル配置と、JSによる動的テキスト置換（フォーム等）のハイブリッド構成。canonicalタグによるSEO重複防止。 |
 | **テーマ切替システム** | `lightbulb.js` / `lightbulb.css` | 物理演算（Spring Physics）を用いた紐の挙動、配色変数の即時置換、効果音・バイブレーション制御。 |
-| **共通ヘッダー** | `script.js` / `header.html` | 非同期読み込みにより保守性を向上。ロゴやアイコンもテーマに合わせて自動反転。 |
-| **お問い合わせフォーム** | `script.js` / Google Apps Script | 「公演依頼」「その他」のラジオボタンで必須項目（予算、会場など）を動的に制御。GASエンドポイントへJSONをPOST送信。 |
+| **共通ヘッダー** | `script.js` / `header.html` | 非同期読み込みにより保守性を向上。現在の言語（JP/EN）に応じてリンク先やアセットパスを自動書き換え。 |
+| **お問い合わせフォーム** | `script.js` / Google Apps Script | 「公演依頼」「その他」のラジオボタンで必須項目を制御。言語設定に応じてラベルやバリデーションメッセージを英語/日本語に切り替え。 |
 | **スクロール演出** | `script.js` / `scroll.css` | `IntersectionObserver` を利用した軽量なフェードインアニメーション。`data-animate` 属性で制御。 |
 | **雪のアニメーション** | `snow-title.js` | HTML要素（タイトル文字）のピクセルデータを解析し、雪が文字の上に物理的に積もる様子をシミュレーション。 |
 | **SEO・OGP** | 各HTML / `robots.txt` | メタタグ完備、クローラー制御、サイトマップ設置による検索エンジン最適化。 |
@@ -45,9 +49,14 @@
 ## 6. フォルダ構成
 ```
 kogakuin_magic/
-├─ index.html                 # ホーム（FV動画、ヒーローセクション）
-├─ about.html                 # 活動紹介（ギャラリー）
-├─ contact.html               # お問い合わせ（多機能フォーム）
+kogakuin_magic/
+├─ index.html                 # ホーム（JP）
+├─ about.html                 # 活動紹介（JP）
+├─ contact.html               # お問い合わせ（JP）
+├─ en/                        # 英語ページディレクトリ
+│  ├─ index.html              # Home (EN)
+│  ├─ about.html              # About (EN)
+│  └─ contact.html            # Contact (EN)
 ├─ header.html                # 共通ヘッダーコンポーネント
 ├─ sitemap.xml                # サイトマップ
 ├─ robots.txt                 # クローラー設定
@@ -79,6 +88,5 @@ kogakuin_magic/
 ## 8. 今後の展望
 1.  **活動実績のCMS化**: Google Spreadsheet等を簡易CMSとして利用し、HTMLを編集せずに実績を追加できる仕組みの構築。
 2.  **画像の次世代フォーマット対応**: 全画像をWebP/AVIFへ完全移行し、さらなる高速化を図る。
-3.  **多言語対応 (i18n)**: 留学生や海外からの訪問者に向けた英語ページの拡充。
-4.  **CI/CDパイプライン**: GitHub Actionsによるデプロイ自動化とLighthouse計測の定期実行。
+3.  **CI/CDパイプライン**: GitHub Actionsによるデプロイ自動化とLighthouse計測の定期実行。
 

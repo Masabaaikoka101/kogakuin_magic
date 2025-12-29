@@ -14,7 +14,25 @@
   </url>
   <url>
     <loc>https://www.ns.kogakuin.ac.jp/kogakuin_magic/contact.html</loc>
-    <lastmod>2025-12-23</lastmod>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ns.kogakuin.ac.jp/kogakuin_magic/en/index.html</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.ns.kogakuin.ac.jp/kogakuin_magic/en/about.html</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ns.kogakuin.ac.jp/kogakuin_magic/en/contact.html</loc>
+    <lastmod>2025-12-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
