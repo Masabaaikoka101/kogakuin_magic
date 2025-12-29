@@ -158,6 +158,14 @@
 
         // カスタムイベント発火
         window.dispatchEvent(new CustomEvent('kms:page-updated'));
+
+        // Google Analytics PageView送信 (SPA対応)
+        if (typeof window.gtag === 'function') {
+            window.gtag('config', 'G-18HJGVGTFB', {
+                'page_title': document.title,
+                'page_location': location.href
+            });
+        }
     }
 
     /**
