@@ -8,10 +8,10 @@
 | 項目 | 内容 |
 | --- | --- |
 | 制作者 | 工学院大学情報学部所属のマジシャンTN（公式サイトのリニューアルを担当） |
-| 技術スタック | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/Google_Apps_Script-4285F4?style=for-the-badge&logo=google-drive&logoColor=white"><br>Vanilla JavaScript (SPA) / Google Apps Script (GAS) |
+| 技術スタック | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/AVIF-000000?style=for-the-badge&logo=avif&logoColor=white"><br>Vanilla JavaScript (SPA) / Google Apps Script (GAS) / **AVIF (画像軽量化)** |
 | ページ構成 | `index.html` (JP) / `en/index.html` (EN) ほか、各ページに英語対応版あり |
 | SEO対策 | `sitemap.xml`, `robots.txt`, OGP, 多言語SEO (canonical/lang) 設定済み |
-| ステータス | 運用中（工学院大学サーバーにて静的ホスティング） |
+| ステータス | 運用中（工学院大学サーバーにて静的ホスティング）<br>※セキュリティおよびサーバー仕様上、CD（継続的デプロイ）は導入不可。手動デプロイにて運用。 |
 
 ## 3. 制作背景と目的
 - **リニューアルの動機**: 既存サイトのデザイン刷新に加え、外部からの公演依頼数を増加させることが最大の目的。スマートフォン利用を前提としたUI/UXの最適化も実施。
@@ -67,7 +67,7 @@ kogakuin_magic/
 │  │  ├─ script.js            # ルーティング、フォーム制御、共通ロジック
 │  │  ├─ lightbulb.js         # テーマ切替（物理演算・音声・振動）
 │  │  └─ snow-title.js        # 冬季限定雪アニメーション
-│  ├─ images/                 # 画像アセット（WebP推奨）
+│  ├─ images/                 # 画像アセット（AVIF統一）
 │  └─ audio/                  # 効果音（Pendant_Light.mp3等）
 └─ LICENSE
 ```
@@ -85,6 +85,7 @@ kogakuin_magic/
 
 ## 8. 今後の展望
 1.  **活動実績のCMS化**: Google Spreadsheet等を簡易CMSとして利用し、HTMLを編集せずに実績を追加できる仕組みの構築。
-2.  **画像の次世代フォーマット対応**: 全画像をWebP/AVIFへ完全移行し、さらなる高速化を図る。
-3.  **CI/CDパイプライン**: GitHub Actionsによるデプロイ自動化とLighthouse計測の定期実行。
+2.  **CI/CDパイプラインの整備**:
+    *   **CI (継続的インテグレーション)**: GitHub Actionsを用い、プルリクエスト時にHTML/CSSの構文チェックやリンク切れ確認を自動実行する体制を整える（将来的な導入を検討）。
+    *   **CD (継続的デプロイ)**: サーバー環境の制約により実施不可のため、今後はデプロイ手順の文書化と効率化（FTPスクリプト等は要検討）に留める。
 

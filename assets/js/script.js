@@ -277,7 +277,7 @@
       const assetsPath = window.ASSETS_PATH || '';
 
       // Poster Image
-      overlay.poster = `${assetsPath}assets/images/landing-intro-poster.png`;
+      overlay.poster = `${assetsPath}assets/images/landing-intro-poster.avif`;
 
       Object.assign(overlay.style, {
         position: 'fixed', inset: '0', width: '100vw', height: '100vh',

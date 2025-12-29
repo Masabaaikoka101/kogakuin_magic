@@ -122,6 +122,9 @@
             document.body.setAttribute('data-page', newDataPage);
         }
 
+        // テーマ画像更新 (DOM挿入前に実行してチラツキ防止)
+        updateThemeImages(doc);
+
         // mainコンテンツ差し替え
         const currentMain = document.querySelector('main');
         const newMain = doc.querySelector('main');
@@ -138,18 +141,15 @@
         // ナビゲーション更新
         updateNav();
 
-        // テーマ画像更新
-        updateThemeImages();
-
         // スクリプト再初期化
         reinitScripts();
 
         // フォーカス管理（アクセシビリティ対応）
-        const newMain = document.querySelector('main');
-        if (newMain) {
-            newMain.setAttribute('tabindex', '-1');
-            newMain.focus({ preventScroll: true });
-            newMain.removeAttribute('tabindex');
+        const newMainInDom = document.querySelector('main');
+        if (newMainInDom) {
+            newMainInDom.setAttribute('tabindex', '-1');
+            newMainInDom.focus({ preventScroll: true });
+            newMainInDom.removeAttribute('tabindex');
         } else {
             document.body.setAttribute('tabindex', '-1');
             document.body.focus({ preventScroll: true });
@@ -201,10 +201,11 @@
 
     /**
      * テーマに基づく画像切り替え
+     * @param {Document|Element} root - 検索対象のルート要素（デフォルトはdocument）
      */
-    function updateThemeImages() {
+    function updateThemeImages(root = document) {
         const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-        document.querySelectorAll('[data-src-dark][data-src-white]').forEach(img => {
+        root.querySelectorAll('[data-src-dark][data-src-white]').forEach(img => {
             const src = theme === 'white'
                 ? img.getAttribute('data-src-white')
                 : img.getAttribute('data-src-dark');
