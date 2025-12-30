@@ -6,6 +6,7 @@
   // 雪アニメーションの状態管理
   let snowInstance = null;
   let renderCallback = null;
+  let activeResizeHandler = null; // 追加: リサイズイベントハンドラの参照保持用
 
   // 期間判定 (日本時間の12月〜2月のみ動作)
   const isWinterSeason = () => {
@@ -22,6 +23,13 @@
       gsap.ticker.remove(renderCallback);
       renderCallback = null;
     }
+
+    // リサイズイベントの削除（メモリリーク防止）
+    if (activeResizeHandler) {
+      window.removeEventListener("resize", activeResizeHandler);
+      activeResizeHandler = null;
+    }
+
     const existingCanvas = document.getElementById('snow-title-canvas');
     if (existingCanvas) {
       existingCanvas.remove();
@@ -242,14 +250,21 @@
 
     // リサイズ対応
     let resizeTimer;
-    window.addEventListener("resize", () => {
+    let lastWidth = window.innerWidth; // 横幅の変化のみ検知
+
+    activeResizeHandler = () => {
+      // 横幅が変わらない（縦スクロールによるバー開閉など）場合は無視
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (snowInstance) {
           init();
         }
       }, 500);
-    });
+    };
+    window.addEventListener("resize", activeResizeHandler);
   };
 
   // 雪アニメーションを遅延開始
