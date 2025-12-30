@@ -272,8 +272,9 @@ main.page {
 
 /* Section spacing increase */
 .section {
-  padding: 6rem 0;
+  padding: 4rem 0;
   /* Previously might have been smaller, increasing for modern feel */
+  /* User requested to reduce top padding to match index page (approx 4rem) */
   position: relative;
 }
 
@@ -793,6 +794,15 @@ body[data-page="about"] .page .container {
   text-align: left;
 }
 
+/* Aboutページ: セクション間の余白を詰める */
+body[data-page="about"] .section:first-of-type {
+  padding-bottom: 0;
+}
+
+body[data-page="about"] .section:nth-of-type(2) {
+  padding-top: 2rem;
+}
+
 body[data-page="about"] .about-details {
   margin-top: 2.5rem;
   display: flex;
@@ -938,10 +948,40 @@ html[data-theme="dark"] .showcase-list {
 
   .hero>h1 {
     font-size: var(--text-h1-mobile);
+    display: flex;
     flex-direction: column;
-    /* ← スマホでは縦並びに */
     align-items: center;
+    justify-content: center;
     gap: 0.2em;
+    text-align: center;
+    width: 100%;
+  }
+
+  .hero>h1 span {
+    white-space: normal;
+    word-break: keep-all;
+    /* 単語の区切りでは改行する */
+    overflow-wrap: break-word;
+    /* 長すぎる単語は強制的に改行 */
+  }
+
+  /* お問い合わせページの見出しはデフォルト（左寄せ）のまま */
+  /* body[data-page="contact"] .container > h1 { ... } removed to keep left align */
+
+  /* フォーム周りのモバイル調整 */
+  body[data-page="contact"] .embed-card,
+  body[data-page="contact"] .form-switch,
+  body[data-page="contact"] .form-input {
+    max-width: 100% !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* モバイルでの見出し折り返しと言語ごとの調整 */
+  .no-break {
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .grid.two {
