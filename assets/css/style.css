@@ -26,6 +26,17 @@
   --field-focus-ring: rgba(120, 169, 255, 0.25);
   /* focus-ringの色も合わせる */
   --color-text-muted: var(--color-secondary);
+
+  /* Typography & Design Variables */
+  --text-body: 1.05rem;
+  /* 16.8px equivalent - Maintainable base size */
+  --text-h1: 2.5rem;
+  /* PC size */
+  --text-h1-mobile: 2.0rem;
+  /* Mobile size */
+  --text-h2: 2.0rem;
+  --text-h2-mobile: 1.75rem;
+  --text-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent-start) 100%);
 }
 
 /*================================================
@@ -42,6 +53,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-primary);
   font-family: var(--font-base);
+  font-size: var(--text-body);
+  /* Set base font size from variable */
   font-weight: 500;
   letter-spacing: 0.05em;
   /* 文字間隔を広げてモダンに */
@@ -257,8 +270,11 @@ main.page {
   padding-bottom: 3rem;
 }
 
+/* Section spacing increase */
 .section {
-  padding: 2rem 0;
+  padding: 6rem 0;
+  /* Previously might have been smaller, increasing for modern feel */
+  position: relative;
 }
 
 .section.alt {
@@ -536,6 +552,20 @@ body[data-page="contact"] .form-switch label {
   position: relative;
   background: transparent;
   border: none;
+}
+
+h1,
+.hero h1 {
+  /* Apply explicitly to .hero h1 to overcome specificity issues */
+  font-size: var(--text-h1);
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  /* Crucial for background-clip: text to work on some browsers */
+  width: fit-content;
+  /* Ensure background doesn't stretch full width unnecessarily */
 }
 
 /* タブ下のアクティブインジケーター */
@@ -907,7 +937,7 @@ html[data-theme="dark"] .showcase-list {
   }
 
   .hero>h1 {
-    font-size: 2rem;
+    font-size: var(--text-h1-mobile);
     flex-direction: column;
     /* ← スマホでは縦並びに */
     align-items: center;
