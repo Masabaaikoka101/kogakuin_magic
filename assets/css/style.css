@@ -193,7 +193,7 @@ body[data-page="contact"] [data-nav="contact"] {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-right: -0.5rem;
+  margin-right: 0;
 }
 
 .nav-right img {
@@ -924,7 +924,10 @@ html[data-theme="dark"] .showcase-list {
     gap: 1rem;
     font-size: 0.9rem;
     flex-wrap: wrap;
+    /* ナビリンクを画面中央に配置 */
+    display: flex;
     justify-content: center;
+    text-align: center;
   }
 
   .nav-right {
@@ -934,8 +937,8 @@ html[data-theme="dark"] .showcase-list {
     justify-content: flex-end;
     gap: 0.75rem;
     align-self: flex-start;
-    /* Reserve space for lightbulb */
-    padding-right: 40px;
+    /* 電球の右端を写真の右端と完全に揃えるための微調整 */
+    padding-right: 3px;
   }
 
   .mode-toggle {

@@ -44,16 +44,18 @@ html:not([data-theme]) {
   position: relative;
   /* (60px - 32px) / 2 = 14px offset to align tops when centered */
   top: 14px;
-  left: 15px;
+  left: 0;
   width: 100px;
   height: 60px;
   z-index: 999;
   pointer-events: none;
 
   transform: scale(0.20);
-  transform-origin: top center;
-  margin-left: -40px;
-  margin-right: -40px;
+  transform-origin: top left;
+  /* アイコン間隔を統一するための左マージン（gap: 12pxに合わせる） */
+  margin-left: 3px;
+  /* 電球の右端を写真の右端と完全に揃えるための負のマージン */
+  margin-right: -80px;
 }
 
 /* Ceiling Line - Hidden as per request */
